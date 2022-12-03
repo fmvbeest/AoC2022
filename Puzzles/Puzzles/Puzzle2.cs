@@ -1,11 +1,11 @@
 ﻿namespace AoC2022.Puzzles;
 
-public class Puzzle2 : IPuzzle
+public class Puzzle2 : PuzzleBase
 {
-    private const string Filename = "Input/puzzle-input-02";
-    private const string PuzzleTitle = "--- Day 2: Rock Paper Scissors ---";
+    protected override string Filename => "Input/puzzle-input-02";
+    protected override string PuzzleTitle => "--- Day 2: Rock Paper Scissors ---";
 
-    public int PartOne(IPuzzleInput input)
+    public override int PartOne(IPuzzleInput input)
     {
         var total = 0;
         
@@ -25,7 +25,7 @@ public class Puzzle2 : IPuzzle
         return total;
     }
 
-    public int PartTwo(IPuzzleInput input)
+    public override int PartTwo(IPuzzleInput input)
     {
         var total = 0;
         
@@ -47,20 +47,6 @@ public class Puzzle2 : IPuzzle
         return total;
     }
 
-    void IPuzzle.Run()
-    {
-        IPuzzleInput input = new PuzzleInput(Filename);
-        
-        Console.WriteLine(PuzzleTitle);
-        var res = PartOne(input);
-        Console.WriteLine("Part One:");
-        Console.WriteLine(res);
-        
-        res = PartTwo(input);
-        Console.WriteLine("Part Two:");
-        Console.WriteLine(res);
-    }
-    
     private static readonly Dictionary<string, int> PointsResult = new()
     {
         { "L", 0 },

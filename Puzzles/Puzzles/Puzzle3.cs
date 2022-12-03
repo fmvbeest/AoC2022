@@ -1,13 +1,14 @@
 ﻿namespace AoC2022.Puzzles;
 
-public class Puzzle3 : IPuzzle
+public class Puzzle3 : PuzzleBase
 {
-    private const string Filename = "Input/puzzle-input-03";
-    private const string PuzzleTitle = "--- Day 3: Rock Paper Scissors ---";
+    protected override string Filename => "Input/puzzle-input-03";
+    protected override string PuzzleTitle => "--- Day 3: Rucksack Reorganization ---";
     
     private const int UppercaseOffset = 38;
     private const int LowercaseOffset = 96;
-    public int PartOne(IPuzzleInput input)
+    
+    public override int PartOne(IPuzzleInput input)
     {
         var total = 0;
 
@@ -24,7 +25,7 @@ public class Puzzle3 : IPuzzle
         return total;
     }
 
-    public int PartTwo(IPuzzleInput input)
+    public override int PartTwo(IPuzzleInput input)
     {
         var total = 0;
 
@@ -62,19 +63,5 @@ public class Puzzle3 : IPuzzle
         }
 
         return priority;
-    }
-    
-    void IPuzzle.Run()
-    {
-        IPuzzleInput input = new PuzzleInput(Filename);
-        
-        Console.WriteLine(PuzzleTitle);
-        var res = PartOne(input);
-        Console.WriteLine("Part One:");
-        Console.WriteLine(res);
-        
-        res = PartTwo(input);
-        Console.WriteLine("Part Two:");
-        Console.WriteLine(res);
     }
 }
