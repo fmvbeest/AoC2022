@@ -7,53 +7,38 @@ public class Puzzle4 : PuzzleBase
     
     public override int PartOne(IPuzzleInput input)
     {
-        var fullSubRanges = 0;
-
-        foreach (var line in input.GetAllLines())
-        {
-            var ranges = line.Split(',');
-            var indicesx = ranges[0].Split('-'); 
-            var indicesy = ranges[1].Split('-');
-            var x = (int.Parse(indicesx[0]), int.Parse(indicesx[1]));
-            var y = (int.Parse(indicesy[0]), int.Parse(indicesy[1]));
-
-            if (IsSubRange(x, y) || IsSubRange(y, x))
-            {
-                fullSubRanges += 1;
-            }
-            
-        }
-        return fullSubRanges;
+        return Preprocess(input).Select(r => r).Count(r => IsSubRange(r.a, r.b) || IsSubRange(r.b, r.a));
     }
 
     public override int PartTwo(IPuzzleInput input)
     {
-        var overlaps = 0;
+        return Preprocess(input).Select(r => r).Count(r => Overlap(r.a, r.b));
+    }
 
+    private static bool IsSubRange(Range a, Range b)
+    {
+        return a.Start.Value >= b.Start.Value && a.End.Value <= b.End.Value;
+    }
+
+    private static bool Overlap(Range a, Range b)
+    {
+        return a.Start.Value <= b.End.Value && b.Start.Value <= a.End.Value;
+    }
+    
+    private static IEnumerable<(Range a, Range b)> Preprocess(IPuzzleInput input)
+    {
+        var ranges = new List<(Range, Range)>();
+        
         foreach (var line in input.GetAllLines())
         {
-            var ranges = line.Split(',');
-            var indicesx = ranges[0].Split('-'); 
-            var indicesy = ranges[1].Split('-');
-            var x = (int.Parse(indicesx[0]), int.Parse(indicesx[1]));
-            var y = (int.Parse(indicesy[0]), int.Parse(indicesy[1]));
-
-            if (Overlap(x, y))
-            {
-                overlaps += 1;
-            }
-            
+            var sections = line.Split(',');
+            var rangex = sections[0].Split('-');
+            var rangey = sections[1].Split('-');
+            var x = new Range(new Index(int.Parse(rangex[0])), new Index(int.Parse(rangex[1])));
+            var y = new Range(new Index(int.Parse(rangey[0])), new Index(int.Parse(rangey[1])));
+            ranges.Add((x,y));
         }
-        return overlaps;
-    }
 
-    private static bool IsSubRange((int start, int end) a, (int start,int end) b)
-    {
-        return a.start >= b.start && a.end <= b.end;
-    }
-
-    private static bool Overlap((int start, int end) a, (int start, int end) b)
-    {
-        return a.start >= b.start && a.start <= b.end || b.start >= a.start && b.start <= a.end;
+        return ranges;
     }
 }
