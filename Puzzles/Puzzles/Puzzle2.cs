@@ -7,17 +7,17 @@ public class Puzzle2 : PuzzleBase
     
     public override int PartOne(IPuzzleInput input)
     {
-        return Preprocess(input).Sum(RPS.GetPoints);
+        return Preprocess(input).Sum(GameRules.GetPoints);
     }
 
     public override int PartTwo(IPuzzleInput input)
     {
-        return Preprocess(input).Sum(game => RPS.GetPoints(RPS.FixGame(game)));
+        return Preprocess(input).Sum(game => GameRules.GetPoints(GameRules.FixGame(game)));
     }
 
-    private static IEnumerable<RPSInstance> Preprocess(IPuzzleInput input)
+    private static IEnumerable<Game> Preprocess(IPuzzleInput input)
     {
-        return input.GetAllLines().Select(line => new RPSInstance()
+        return input.GetAllLines().Select(line => new Game()
         {
             TheirMove = ParseMove(line[0]), 
             OurMove = ParseMove(line[2]), 
@@ -25,33 +25,33 @@ public class Puzzle2 : PuzzleBase
         }).ToList();
     }
 
-    private static RPS.Move ParseMove(char move) => move switch
+    private static GameRules.Move ParseMove(char move) => move switch
     {
-        'A' => RPS.Move.Rock,
-        'B' => RPS.Move.Paper,
-        'C' => RPS.Move.Scissor,
-        'X' => RPS.Move.Rock,
-        'Y' => RPS.Move.Paper,
-        'Z' => RPS.Move.Scissor,
+        'A' => GameRules.Move.Rock,
+        'B' => GameRules.Move.Paper,
+        'C' => GameRules.Move.Scissor,
+        'X' => GameRules.Move.Rock,
+        'Y' => GameRules.Move.Paper,
+        'Z' => GameRules.Move.Scissor,
         _ => throw new ArgumentOutOfRangeException(nameof(move), move, "Unexpected move")
     };
         
-    private static RPS.Result ParseOutcome(char move) => move switch
+    private static GameRules.Result ParseOutcome(char move) => move switch
     {
-        'X' => RPS.Result.Loss,
-        'Y' => RPS.Result.Draw,
-        'Z' => RPS.Result.Win,
+        'X' => GameRules.Result.Loss,
+        'Y' => GameRules.Result.Draw,
+        'Z' => GameRules.Result.Win,
         _ => throw new ArgumentOutOfRangeException(nameof(move), move, "Unexpected outcome")
     };
 
-    private class RPSInstance
+    private class Game
     {
-        public RPS.Move TheirMove { get; init; }
-        public RPS.Move OurMove { get; set; }
-        public RPS.Result ExpectedOutcome { get; init; }
+        public GameRules.Move TheirMove { get; init; }
+        public GameRules.Move OurMove { get; set; }
+        public GameRules.Result ExpectedOutcome { get; init; }
     }
     
-    private static class RPS
+    private static class GameRules
     {
         public enum Move
         {
@@ -63,18 +63,18 @@ public class Puzzle2 : PuzzleBase
             Loss = 0, Draw = 3, Win = 6
         }
 
-        public static int GetPoints(RPSInstance game)
+        public static int GetPoints(Game game)
         {
             return (int)GetResult(game) + (int)game.OurMove;
         }
 
-        public static RPSInstance FixGame(RPSInstance game)
+        public static Game FixGame(Game game)
         {
             game.OurMove = SuggestedMoves[(game.TheirMove, game.ExpectedOutcome)];
             return game;
         }
 
-        private static Result GetResult(RPSInstance game)
+        private static Result GetResult(Game game)
         {
             return Outcome[(game.OurMove, game.TheirMove)];
         }

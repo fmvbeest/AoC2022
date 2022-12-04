@@ -27,18 +27,12 @@ public class Puzzle4 : PuzzleBase
     
     private static IEnumerable<(Range a, Range b)> Preprocess(IPuzzleInput input)
     {
-        var ranges = new List<(Range, Range)>();
-        
-        foreach (var line in input.GetAllLines())
-        {
-            var sections = line.Split(',');
-            var rangex = sections[0].Split('-');
-            var rangey = sections[1].Split('-');
-            var x = new Range(new Index(int.Parse(rangex[0])), new Index(int.Parse(rangex[1])));
-            var y = new Range(new Index(int.Parse(rangey[0])), new Index(int.Parse(rangey[1])));
-            ranges.Add((x,y));
-        }
-
-        return ranges;
+        return (from line in input.GetAllLines() 
+            select line.Split(',') into sections 
+            let rangex = sections[0].Split('-') 
+            let rangey = sections[1].Split('-') 
+            let x = new Range(new Index(int.Parse(rangex[0])), new Index(int.Parse(rangex[1]))) 
+            let y = new Range(new Index(int.Parse(rangey[0])), new Index(int.Parse(rangey[1]))) 
+            select (x, y)).ToList();
     }
 }

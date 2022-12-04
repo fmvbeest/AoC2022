@@ -10,45 +10,30 @@ public class Puzzle3 : PuzzleBase
     
     public override int PartOne(IPuzzleInput input)
     {
-        var total = 0;
-
-        foreach (var line in input.GetAllLines())
-        {
-            var s = line.Trim();
-            var x = s[..(s.Length / 2)];
-            var y = s.Substring(s.Length / 2, s.Length / 2);
-
-            var intersect = x.Intersect(y).ToArray().First();
-
-            total += GetPriority(intersect);
-        }
-        return total;
+        return PreprocessPartOne(input).Select(s => s[0].Intersect(s[1]).First()).Select(GetPriority).Sum();
     }
 
     public override int PartTwo(IPuzzleInput input)
     {
-        var total = 0;
+        return PreprocessPartTwo(input).Select(s => s[0].Intersect(s[1]).Intersect(s[2]).First()).Select(GetPriority).Sum();
+    }
+    
+    private static IEnumerable<string[]> PreprocessPartOne(IPuzzleInput input)
+    {
+        return input.GetAllLines().Select(s => new[] { s[..(s.Length / 2)], s[(s.Length / 2)..] }).ToArray();
+    }
+    
+    private static IEnumerable<string[]> PreprocessPartTwo(IPuzzleInput input)
+    {
+        var res = new List<string[]>();
 
-        var lines = input.GetAllLines();
-
-        var index = 0;
-        while (index < lines.Length)
+        var s = input.GetAllLines();
+        for (var index = 0; index < s.Length; index += 3)
         {
-            var bagone = lines[index];
-            var bagtwo = lines[index+1];
-            var bagthree = lines[index+2];
-
-            var intersect = bagone.Intersect(bagtwo);
-            intersect = intersect.Intersect(bagthree);
-
-            var badge = intersect.ToArray().First();
-
-            total += GetPriority(badge);
-
-            index += 3;
+            res.Add(new []{ s[index], s[index+1], s[index+2]});
         }
 
-        return total;
+        return res.ToArray();
     }
 
     private static int GetPriority(char c)
