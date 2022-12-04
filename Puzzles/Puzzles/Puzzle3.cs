@@ -5,8 +5,8 @@ public class Puzzle3 : PuzzleBase
     protected override string Filename => "Input/puzzle-input-03";
     protected override string PuzzleTitle => "--- Day 3: Rucksack Reorganization ---";
     
-    private const int UppercaseOffset = -38;
-    private const int LowercaseOffset = -96;
+    private const int UppercaseOffset = 27;
+    private const int LowercaseOffset = 1;
     
     public override int PartOne(IPuzzleInput input)
     {
@@ -25,30 +25,11 @@ public class Puzzle3 : PuzzleBase
     
     private static IEnumerable<string[]> PreprocessPartTwo(IPuzzleInput input)
     {
-        var res = new List<string[]>();
-
-        var s = input.GetAllLines();
-        for (var index = 0; index < s.Length; index += 3)
-        {
-            res.Add(new []{ s[index], s[index+1], s[index+2]});
-        }
-
-        return res.ToArray();
+        return input.GetAllLines().Chunk(3);
     }
 
     private static int GetPriority(char c)
     {
-        var priority = (int)c;
-        if (char.IsUpper(c))
-        {
-            return priority + UppercaseOffset;
-        } 
-        
-        if (char.IsLower(c))
-        {
-            return priority + LowercaseOffset;
-        }
-
-        return priority;
+        return char.IsLower(c) ? c - 'a' + LowercaseOffset : c - 'A' + UppercaseOffset;
     }
 }
