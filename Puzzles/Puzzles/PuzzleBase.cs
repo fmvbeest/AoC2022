@@ -12,14 +12,14 @@ public abstract class PuzzleBase : IPuzzle
     public virtual void Run()
     {
         IPuzzleInput input = new PuzzleInput(Filename);
-        
         Console.WriteLine(PuzzleTitle);
+        
         var res = PartOne(input);
-        Console.WriteLine("Part One:");
+        Console.Write("Solution Part One: ");
         Console.WriteLine(res);
         
         res = PartTwo(input);
-        Console.WriteLine("Part Two:");
+        Console.Write("Solution Part Two: ");
         Console.WriteLine(res);
     }
 }

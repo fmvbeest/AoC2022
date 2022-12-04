@@ -7,45 +7,34 @@ public class Puzzle1 : PuzzleBase
 
     public override int PartOne(IPuzzleInput input)
     {
-        var max = 0;
-        var current = 0;
-          
-        foreach (var line in input.GetAllLines())
-        {
-               
-            if (string.IsNullOrEmpty(line))
-            {
-                max = Math.Max(max, current);
-                current = 0;
-                continue;
-            }
-          
-            current += int.Parse(line.Trim());
-        }
+        var calories = Preprocess(input);
         
-        return Math.Max(max, current);
+        return calories.Select(x => x.Sum()).Max();
     }
 
     public override int PartTwo(IPuzzleInput input)
     {
-        var values = new List<int>();
-        var sum = 0;
-          
+        var calories = Preprocess(input);
+        
+        return calories.Select(x => x.Sum()).OrderByDescending(x => x).Take(3).Sum();
+    }
+
+    private static IEnumerable<IEnumerable<int>> Preprocess(IPuzzleInput input)
+    {
+        var calories = new List<IEnumerable<int>>();
+        var currentElf = new List<int>();
         foreach (var line in input.GetAllLines())
         {
             if (string.IsNullOrEmpty(line))
             {
-                values.Add(sum);
-                sum = 0;
+                calories.Add(currentElf.ToArray());
+                currentElf = new List<int>();
                 continue;
             }
-
-            sum += int.Parse(line.Trim());
+            currentElf.Add(int.Parse(line));
         }
-        values.Add(sum);
-        values.Sort();
-        values.Reverse();
-        
-        return values[0] + values[1] + values[2];
+        calories.Add(currentElf);
+
+        return calories.ToArray();
     }
 }

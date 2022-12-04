@@ -11,15 +11,11 @@ public class Puzzle2 : PuzzleBase
         
         foreach (var line in input.GetAllLines())
         {
-            var moves = line.Trim().Split(' ');
-            var x = ShapeMap[moves[0]];
-            var y = ShapeMap[moves[1]];
+            var x = ShapeMap[line[0]];
+            var y = ShapeMap[line[2]];
             var r = Result[(y, x)];
-            var pr = PointsResult[r];
-            var ps = PointsShape[y];
-            var points = pr + ps;
 
-            total += points;
+            total += GetPoints(r, y);
         }
 
         return total;
@@ -31,76 +27,76 @@ public class Puzzle2 : PuzzleBase
         
         foreach (var line in input.GetAllLines())
         {
-            var moves = line.Trim().Split(' ');
-            var x = ShapeMap[moves[0]];
-            var y = ExpectedResult[moves[1]];
+            var x = ShapeMap[line[0]];
+            var y = ExpectedResult[line[2]];
             var m = SuggestedMoves[(x, y)];
-            
             var r = Result[(m, x)];
-            var pr = PointsResult[r];
-            var ps = PointsShape[m];
-            var points = pr + ps;
-            
-            total += points;
+
+            total += GetPoints(r, m);
         }
         
         return total;
     }
 
-    private static readonly Dictionary<string, int> PointsResult = new()
+    private static int GetPoints(char result, char shape)
     {
-        { "L", 0 },
-        { "D", 3 },
-        { "W", 6 }
+        return PointsResult[result] + PointsShape[shape];
+    }
+
+    private static readonly Dictionary<char, int> PointsResult = new()
+    {
+        { 'L', 0 },
+        { 'D', 3 },
+        { 'W', 6 }
     };
     
-    private static readonly Dictionary<string, int> PointsShape = new()
+    private static readonly Dictionary<char, int> PointsShape = new()
     {
-        { "R", 1 },
-        { "P", 2 },
-        { "S", 3 }
+        { 'R', 1 },
+        { 'P', 2 },
+        { 'S', 3 }
     };
 
-    private static readonly Dictionary<string, string> ShapeMap = new()
+    private static readonly Dictionary<char, char> ShapeMap = new()
     {
-        { "A", "R" },
-        { "B", "P" },
-        { "C", "S" },
-        { "X", "R" },
-        { "Y", "P" },
-        { "Z", "S" }
+        { 'A', 'R' },
+        { 'B', 'P' },
+        { 'C', 'S' },
+        { 'X', 'R' },
+        { 'Y', 'P' },
+        { 'Z', 'S' }
     };
 
-    private static readonly Dictionary<(string, string), string> Result = new()
+    private static readonly Dictionary<(char, char), char> Result = new()
     {
-        { ("R", "S"), "W" },
-        { ("S", "P"), "W" },
-        { ("P", "R"), "W" },
-        { ("S", "R"), "L" },
-        { ("P", "S"), "L" },
-        { ("R", "P"), "L" },
-        { ("R", "R"), "D" },
-        { ("P", "P"), "D" },
-        { ("S", "S"), "D" }
+        { ('R', 'S'), 'W' },
+        { ('S', 'P'), 'W' },
+        { ('P', 'R'), 'W' },
+        { ('S', 'R'), 'L' },
+        { ('P', 'S'), 'L' },
+        { ('R', 'P'), 'L' },
+        { ('R', 'R'), 'D' },
+        { ('P', 'P'), 'D' },
+        { ('S', 'S'), 'D' }
     };
     
-    private static readonly Dictionary<string, string> ExpectedResult = new()
+    private static readonly Dictionary<char, char> ExpectedResult = new()
     {
-        { "X", "L" },
-        { "Y", "D" },
-        { "Z", "W" }
+        { 'X', 'L' },
+        { 'Y', 'D' },
+        { 'Z', 'W' }
     };
     
-    private static readonly Dictionary<(string, string), string> SuggestedMoves = new()
+    private static readonly Dictionary<(char, char), char> SuggestedMoves = new()
     {
-        { ("R", "W"), "P" },
-        { ("R", "L"), "S" },
-        { ("R", "D"), "R" },
-        { ("S", "W"), "R" },
-        { ("S", "L"), "P" },
-        { ("S", "D"), "S" },
-        { ("P", "W"), "S" },
-        { ("P", "L"), "R" },
-        { ("P", "D"), "P" }
+        { ('R', 'W'), 'P' },
+        { ('R', 'L'), 'S' },
+        { ('R', 'D'), 'R' },
+        { ('S', 'W'), 'R' },
+        { ('S', 'L'), 'P' },
+        { ('S', 'D'), 'S' },
+        { ('P', 'W'), 'S' },
+        { ('P', 'L'), 'R' },
+        { ('P', 'D'), 'P' }
     };
 }
