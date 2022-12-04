@@ -7,12 +7,12 @@ public class Puzzle4 : PuzzleBase
     
     public override int PartOne(IPuzzleInput input)
     {
-        return Preprocess(input).Select(r => r).Count(r => IsSubRange(r.a, r.b) || IsSubRange(r.b, r.a));
+        return Preprocess(input).Count(p => IsSubRange(p.a, p.b) || IsSubRange(p.b, p.a));
     }
 
     public override int PartTwo(IPuzzleInput input)
     {
-        return Preprocess(input).Select(r => r).Count(r => Overlap(r.a, r.b));
+        return Preprocess(input).Count(p => Overlap(p.a, p.b));
     }
 
     private static bool IsSubRange(Range a, Range b)
