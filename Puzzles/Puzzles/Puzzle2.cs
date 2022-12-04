@@ -15,7 +15,7 @@ public class Puzzle2 : PuzzleBase
         return Preprocess(input).Sum(game => RPS.GetPoints(RPS.FixGame(game)));
     }
 
-    private IEnumerable<RPSInstance> Preprocess(IPuzzleInput input)
+    private static IEnumerable<RPSInstance> Preprocess(IPuzzleInput input)
     {
         return input.GetAllLines().Select(line => new RPSInstance()
         {
