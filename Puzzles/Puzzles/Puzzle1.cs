@@ -7,16 +7,12 @@ public class Puzzle1 : PuzzleBase
 
     public override int PartOne(IPuzzleInput input)
     {
-        var calories = Preprocess(input);
-        
-        return calories.Select(x => x.Sum()).Max();
+        return Preprocess(input).Select(x => x.Sum()).Max();
     }
 
     public override int PartTwo(IPuzzleInput input)
     {
-        var calories = Preprocess(input);
-        
-        return calories.Select(x => x.Sum()).OrderByDescending(x => x).Take(3).Sum();
+        return Preprocess(input).Select(x => x.Sum()).OrderByDescending(x => x).Take(3).Sum();
     }
 
     private static IEnumerable<IEnumerable<int>> Preprocess(IPuzzleInput input)
