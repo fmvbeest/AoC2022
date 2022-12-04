@@ -5,8 +5,8 @@ public class Puzzle3 : PuzzleBase
     protected override string Filename => "Input/puzzle-input-03";
     protected override string PuzzleTitle => "--- Day 3: Rucksack Reorganization ---";
     
-    private const int UppercaseOffset = 38;
-    private const int LowercaseOffset = 96;
+    private const int UppercaseOffset = -38;
+    private const int LowercaseOffset = -96;
     
     public override int PartOne(IPuzzleInput input)
     {
@@ -41,10 +41,12 @@ public class Puzzle3 : PuzzleBase
         var priority = (int)c;
         if (char.IsUpper(c))
         {
-            priority -= UppercaseOffset;
-        } else if (char.IsLower(c))
+            return priority + UppercaseOffset;
+        } 
+        
+        if (char.IsLower(c))
         {
-            priority -= LowercaseOffset;
+            return priority + LowercaseOffset;
         }
 
         return priority;
