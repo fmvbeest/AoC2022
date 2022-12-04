@@ -17,20 +17,9 @@ public class Puzzle1 : PuzzleBase
 
     private static IEnumerable<IEnumerable<int>> Preprocess(IPuzzleInput input)
     {
-        var calories = new List<IEnumerable<int>>();
-        var currentElf = new List<int>();
-        foreach (var line in input.GetAllLines())
-        {
-            if (string.IsNullOrEmpty(line))
-            {
-                calories.Add(currentElf.ToArray());
-                currentElf = new List<int>();
-                continue;
-            }
-            currentElf.Add(int.Parse(line));
-        }
-        calories.Add(currentElf);
-
-        return calories.ToArray();
+        var index = 0;
+        return input.GetAllLines().
+            GroupBy(x => !string.IsNullOrEmpty(x) ? index : index++, 
+                x => !string.IsNullOrEmpty(x) ? int.Parse(x) : 0);
     }
 }
