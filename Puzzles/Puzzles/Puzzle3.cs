@@ -8,48 +8,33 @@ public class Puzzle3 : PuzzleBase<int, IEnumerable<string[]>>
     private const int UppercaseOffset = 27;
     private const int LowercaseOffset = 1;
     
-    public Puzzle3() : base() { }
-    public Puzzle3(IPuzzleInput input) : base(input) { }
-    
-    public override int PartOne()
+    public override int PartOne(IEnumerable<string[]> input)
     {
-        return PreparedInput.Select(s => s[0].Intersect(s[1]).First()).Select(GetPriority).Sum();
+        return input.Select(s => s[0].Intersect(s[1]).First()).Select(GetPriority).Sum();
     }
 
-    public override int PartTwo()
+    public override int PartTwo(IEnumerable<string[]> input)
     {
-        return PreparedInput.Select(s => s[0].Intersect(s[1]).Intersect(s[2]).First()).Select(GetPriority).Sum();
+        return input.Select(s => s[0].Intersect(s[1]).Intersect(s[2]).First()).Select(GetPriority).Sum();
     }
 
-    public override void Preprocess(IPuzzleInput input, int part = 1)
+    public override IEnumerable<string[]> Preprocess(IPuzzleInput input, int part = 1)
     {
-        PreparedInput = part == 2 ? PreprocessPartTwo(input) : PreprocessPartOne(input);
+        return part == 2 ? PreprocessPartTwo(input) : PreprocessPartOne(input);
     }
 
     private static IEnumerable<string[]> PreprocessPartOne(IPuzzleInput input)
     {
-        return input.GetAllLines().Select(s => new[] { s[..(s.Length / 2)], s[(s.Length / 2)..] }).ToArray();
+        return input.GetInput().Select(s => new[] { s[..(s.Length / 2)], s[(s.Length / 2)..] }).ToArray();
     }
     
     private static IEnumerable<string[]> PreprocessPartTwo(IPuzzleInput input)
     {
-        return input.GetAllLines().Chunk(3);
+        return input.GetInput().Chunk(3);
     }
 
     private static int GetPriority(char c)
     {
         return char.IsLower(c) ? c - 'a' + LowercaseOffset : c - 'A' + UppercaseOffset;
-    }
-
-    public override void Run()
-    {
-        Console.WriteLine(PuzzleTitle);
-        
-        Console.Write("Solution Part One: ");
-        Console.WriteLine(PartOne());
-        
-        Preprocess(new PuzzleInput(Filename), 2);
-        Console.Write("Solution Part Two: ");
-        Console.WriteLine(PartTwo());
     }
 }

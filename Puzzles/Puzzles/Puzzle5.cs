@@ -6,13 +6,10 @@ public class Puzzle5 : PuzzleBase<string, (Stack<char>[], Stack<Instruction>)>
 {
     protected override string Filename => "Input/puzzle-input-05";
     protected override string PuzzleTitle => "--- Day 5: Supply Stacks ---";
-    
-    public Puzzle5() : base() { }
-    public Puzzle5(IPuzzleInput input) : base(input) { }
-    
-    public override string PartOne()
+
+    public override string PartOne((Stack<char>[], Stack<Instruction>) input)
     {
-        var (supplyCrates, instructions) = PreparedInput;
+        var (supplyCrates, instructions) = input;
 
         var crateMover = new CrateMover9000(supplyCrates);
         
@@ -24,9 +21,9 @@ public class Puzzle5 : PuzzleBase<string, (Stack<char>[], Stack<Instruction>)>
         return supplyCrates.Aggregate("", (current, crate) => current + crate.Peek());
     }
 
-    public override string PartTwo()
+    public override string PartTwo((Stack<char>[], Stack<Instruction>) input)
     {
-        var (supplyCrates, instructions) = PreparedInput;
+        var (supplyCrates, instructions) = input;
 
         var crateMover = new CrateMover9001(supplyCrates);
         
@@ -38,21 +35,9 @@ public class Puzzle5 : PuzzleBase<string, (Stack<char>[], Stack<Instruction>)>
         return supplyCrates.Aggregate("", (current, crate) => current + crate.Peek());
     }
     
-    public override void Run()
+    public override (Stack<char>[], Stack<Instruction>) Preprocess(IPuzzleInput input, int part = 1)
     {
-        Console.WriteLine(PuzzleTitle);
-        
-        Console.Write("Solution Part One: ");
-        Console.WriteLine(PartOne());
-        
-        Preprocess(new PuzzleInput(Filename), 2);
-        Console.Write("Solution Part Two: ");
-        Console.WriteLine(PartTwo());
-    }
-    
-    public override void Preprocess(IPuzzleInput input, int part = 1)
-    {
-        var lines = input.GetAllLines().Reverse().ToList();
+        var lines = input.GetInput().Reverse().ToList();
         var instructions = new Stack<Instruction>();
         
         int i;
@@ -86,7 +71,7 @@ public class Puzzle5 : PuzzleBase<string, (Stack<char>[], Stack<Instruction>)>
                 }
             }
         }
-        PreparedInput = (supplyCrates, instructions);
+        return (supplyCrates, instructions);
     }
 
     private abstract class CrateMover

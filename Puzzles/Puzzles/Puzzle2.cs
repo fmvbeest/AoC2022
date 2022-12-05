@@ -7,22 +7,19 @@ public class Puzzle2 : PuzzleBase<int, IEnumerable<Game>>
     protected override string Filename => "Input/puzzle-input-02";
     protected override string PuzzleTitle => "--- Day 2: Rock Paper Scissors ---";
 
-    public Puzzle2() : base() { }
-    public Puzzle2(IPuzzleInput input) : base(input) { }
-    
-    public override int PartOne()
+    public override int PartOne(IEnumerable<Game> input)
     {
-        return PreparedInput.Sum(GameRules.GetPoints);
+        return input.Sum(GameRules.GetPoints);
     }
 
-    public override int PartTwo()
+    public override int PartTwo(IEnumerable<Game> input)
     {
-        return PreparedInput.Sum(game => GameRules.GetPoints(GameRules.FixGame(game)));
+        return input.Sum(game => GameRules.GetPoints(GameRules.FixGame(game)));
     }
 
-    public override void Preprocess(IPuzzleInput input, int part = 1)
+    public override IEnumerable<Game> Preprocess(IPuzzleInput input, int part = 1)
     {
-        PreparedInput = input.GetAllLines().Select(line => new Game()
+        return input.GetInput().Select(line => new Game()
         {
             TheirMove = ParseMove(line[0]), 
             OurMove = ParseMove(line[2]), 

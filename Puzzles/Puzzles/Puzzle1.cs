@@ -5,23 +5,20 @@ public class Puzzle1 : PuzzleBase<int, IEnumerable<IEnumerable<int>>>
     protected override string Filename => "Input/puzzle-input-01";
     protected override string PuzzleTitle => "--- Day 1: Calorie Counting ---";
 
-    public Puzzle1() : base() { }
-    public Puzzle1(IPuzzleInput input) : base(input) { }
-
-    public override int PartOne()
+    public override int PartOne(IEnumerable<IEnumerable<int>> input)
     {
-        return PreparedInput.Select(x => x.Sum()).Max();
+        return input.Select(x => x.Sum()).Max();
     }
 
-    public override int PartTwo()
+    public override int PartTwo(IEnumerable<IEnumerable<int>> input)
     {
-        return PreparedInput.Select(x => x.Sum()).OrderByDescending(x => x).Take(3).Sum();
+        return input.Select(x => x.Sum()).OrderByDescending(x => x).Take(3).Sum();
     }
 
-    public override void Preprocess(IPuzzleInput input, int part = 1)
+    public override IEnumerable<IEnumerable<int>> Preprocess(IPuzzleInput input, int part = 1)
     {
         var index = 0;
-        PreparedInput = input.GetAllLines().
+        return input.GetInput().
             GroupBy(x => !string.IsNullOrEmpty(x) ? index : index++, 
                 x => !string.IsNullOrEmpty(x) ? int.Parse(x) : 0);
     }

@@ -8,8 +8,8 @@ public class PuzzleInput : IPuzzleInput
     {
         _allLines = File.ReadAllLines(filename);
     }
-    
-    public string[] GetAllLines()
+
+    public IEnumerable<string> GetInput()
     {
         return _allLines;
     }

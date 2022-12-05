@@ -2,5 +2,5 @@
 
 public interface IPuzzleInput
 {
-    public string[] GetAllLines();
+    public IEnumerable<string> GetInput();
 }

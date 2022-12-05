@@ -3,36 +3,31 @@ using AoC2022.Puzzles;
 
 public class TestPuzzle3
 {
-    private readonly IPuzzleInput _testInput = new PuzzleInput("Input/test-input-03");
-    private readonly IPuzzleInput _puzzleInput = new PuzzleInput("Input/puzzle-input-03");
+    private readonly PuzzleInput _testInput = new("Input/test-input-03");
+    private readonly PuzzleInput _puzzleInput = new("Input/puzzle-input-03");
+    private readonly Puzzle3 _puzzle = new();
     
     [Fact]
     public void TestPartOneSample()
     {
-        Assert.Equal(157, new Puzzle3(_testInput).PartOne());
+        Assert.Equal(157, _puzzle.PartOne(_puzzle.Preprocess(_testInput)));
     }
     
     [Fact]
     public void TestPartOneActual()
     {
-        Assert.Equal(8401, new Puzzle3(_puzzleInput).PartOne());
+        Assert.Equal(8401, _puzzle.PartOne(_puzzle.Preprocess(_puzzleInput)));
     }
     
     [Fact]
     public void TestPartTwoSample()
     {
-        var puzzle = new Puzzle3();
-        puzzle.Preprocess(_testInput, 2);
-        
-        Assert.Equal(70, puzzle.PartTwo());
+        Assert.Equal(70, _puzzle.PartTwo(_puzzle.Preprocess(_testInput, 2)));
     }
     
     [Fact]
     public void TestPartTwoActual()
     {
-        var puzzle = new Puzzle3();
-        puzzle.Preprocess(_puzzleInput, 2);
-        
-        Assert.Equal(2641, puzzle.PartTwo());
+        Assert.Equal(2641, _puzzle.PartTwo(_puzzle.Preprocess(_puzzleInput, 2)));
     }
 }

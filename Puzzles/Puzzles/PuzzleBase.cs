@@ -5,25 +5,21 @@ public abstract class PuzzleBase<T, U> : IPuzzle
     protected abstract string Filename { get; }
     protected abstract string PuzzleTitle { get; }
 
-    protected U PreparedInput;
+    public abstract T PartOne(U input);
 
-    protected PuzzleBase() => Preprocess(new PuzzleInput(Filename));
-    protected PuzzleBase(IPuzzleInput input) => Preprocess(input);
+    public abstract T PartTwo(U input);
 
-    public abstract T PartOne();
-
-    public abstract T PartTwo();
-
-    public abstract void Preprocess(IPuzzleInput input, int part = 1);
+    public abstract U Preprocess(IPuzzleInput input, int part = 1);
 
     public virtual void Run()
     {
+        var input = new PuzzleInput(Filename);
         Console.WriteLine(PuzzleTitle);
         
         Console.Write("Solution Part One: ");
-        Console.WriteLine(PartOne());
+        Console.WriteLine(PartOne(Preprocess(input)));
         
         Console.Write("Solution Part Two: ");
-        Console.WriteLine(PartTwo());
+        Console.WriteLine(PartTwo(Preprocess(input, 2)));
     }
 }
