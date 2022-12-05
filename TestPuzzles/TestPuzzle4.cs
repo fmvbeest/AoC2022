@@ -7,8 +7,8 @@ public class TestPuzzle4
     public void TestPartOneSample()
     {
         IPuzzleInput input = new PuzzleInput("Input/test-input-04");
-        var puzzle = new Puzzle4();
-        var res = puzzle.PartOne(input);
+        var puzzle = new Puzzle4(input);
+        var res = puzzle.PartOne();
         
         Assert.Equal(2, res);
     }
@@ -17,8 +17,8 @@ public class TestPuzzle4
     public void TestPartOneActual()
     {
         IPuzzleInput input = new PuzzleInput("Input/puzzle-input-04");
-        var puzzle = new Puzzle4();
-        var res = puzzle.PartOne(input);
+        var puzzle = new Puzzle4(input);
+        var res = puzzle.PartOne();
         
         Assert.Equal(494, res);
     }
@@ -27,8 +27,8 @@ public class TestPuzzle4
     public void TestPartTwoSample()
     {
         IPuzzleInput input = new PuzzleInput("Input/test-input-04");
-        var puzzle = new Puzzle4();
-        var res = puzzle.PartTwo(input);
+        var puzzle = new Puzzle4(input);
+        var res = puzzle.PartTwo();
         
         Assert.Equal(4, res);
     }
@@ -37,8 +37,8 @@ public class TestPuzzle4
     public void TestPartTwoActual()
     {
         IPuzzleInput input = new PuzzleInput("Input/puzzle-input-04");
-        var puzzle = new Puzzle4();
-        var res = puzzle.PartTwo(input);
+        var puzzle = new Puzzle4(input);
+        var res = puzzle.PartTwo();
         
         Assert.Equal(833, res);
     }
