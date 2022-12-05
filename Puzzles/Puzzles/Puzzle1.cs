@@ -1,24 +1,27 @@
 ﻿namespace AoC2022.Puzzles;
 
-public class Puzzle1 : PuzzleBase<int>
+public class Puzzle1 : PuzzleBase<int, IEnumerable<IEnumerable<int>>>
 {
     protected override string Filename => "Input/puzzle-input-01";
     protected override string PuzzleTitle => "--- Day 1: Calorie Counting ---";
+    
+    public Puzzle1() : base() { }
+    public Puzzle1(IPuzzleInput input) : base(input) { }
 
-    public override int PartOne(IPuzzleInput input)
+    public override int PartOne()
     {
-        return Preprocess(input).Select(x => x.Sum()).Max();
+        return PreparedInput.Select(x => x.Sum()).Max();
     }
 
-    public override int PartTwo(IPuzzleInput input)
+    public override int PartTwo()
     {
-        return Preprocess(input).Select(x => x.Sum()).OrderByDescending(x => x).Take(3).Sum();
+        return PreparedInput.Select(x => x.Sum()).OrderByDescending(x => x).Take(3).Sum();
     }
 
-    private static IEnumerable<IEnumerable<int>> Preprocess(IPuzzleInput input)
+    public override void Preprocess(IPuzzleInput input, int part = 1)
     {
         var index = 0;
-        return input.GetAllLines().
+        PreparedInput = input.GetAllLines().
             GroupBy(x => !string.IsNullOrEmpty(x) ? index : index++, 
                 x => !string.IsNullOrEmpty(x) ? int.Parse(x) : 0);
     }

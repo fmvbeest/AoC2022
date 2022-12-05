@@ -8,7 +8,7 @@ public static class Program
      public static void Main(string[] args)
      {
           var puzzles = Assembly.GetExecutingAssembly().GetTypes()
-               .Where(t => t.GetInterfaces().Contains(typeof(IPuzzle)) && !t.Name.StartsWith(nameof(PuzzleBase<object>))).ToList();
+               .Where(t => t.GetInterfaces().Contains(typeof(IPuzzle)) && !t.Name.StartsWith(nameof(PuzzleBase<object, object>))).ToList();
 
           var implementedPuzzles = puzzles.Select(p => int.Parse(p.Name[6..])).ToArray();
           

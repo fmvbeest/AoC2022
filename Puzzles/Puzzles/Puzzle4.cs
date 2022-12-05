@@ -1,18 +1,21 @@
 ﻿namespace AoC2022.Puzzles;
 
-public class Puzzle4 : PuzzleBase<int>
+public class Puzzle4 : PuzzleBase<int, IEnumerable<(Range a, Range b)>>
 {
     protected override string Filename => "Input/puzzle-input-04";
     protected override string PuzzleTitle => "--- Day 4: Camp Cleanup ---";
     
-    public override int PartOne(IPuzzleInput input)
+    public Puzzle4() : base() { }
+    public Puzzle4(IPuzzleInput input) : base(input) { }
+    
+    public override int PartOne()
     {
-        return Preprocess(input).Count(p => IsSubRange(p.a, p.b) || IsSubRange(p.b, p.a));
+        return PreparedInput.Count(p => IsSubRange(p.a, p.b) || IsSubRange(p.b, p.a));
     }
 
-    public override int PartTwo(IPuzzleInput input)
+    public override int PartTwo()
     {
-        return Preprocess(input).Count(p => Overlap(p.a, p.b));
+        return PreparedInput.Count(p => Overlap(p.a, p.b));
     }
 
     private static bool IsSubRange(Range a, Range b)
@@ -24,10 +27,10 @@ public class Puzzle4 : PuzzleBase<int>
     {
         return a.Start.Value <= b.End.Value && b.Start.Value <= a.End.Value;
     }
-    
-    private static IEnumerable<(Range a, Range b)> Preprocess(IPuzzleInput input)
+
+    public override void Preprocess(IPuzzleInput input, int part = 1)
     {
-        return (from line in input.GetAllLines() 
+        PreparedInput = (from line in input.GetAllLines() 
             select line.Split(',') into sections 
             let rangex = sections[0].Split('-') 
             let rangey = sections[1].Split('-') 
