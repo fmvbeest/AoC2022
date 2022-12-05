@@ -60,39 +60,32 @@ public class Puzzle5 : PuzzleBase
     {
         var lines = input.GetAllLines().Reverse().ToList();
         var instructions = new Stack<Instruction>();
+        
         int i;
         for (i = 0; !string.IsNullOrEmpty(lines[i]); i++)
         {
             var s = lines[i].Split(' ');
-            //Console.WriteLine($"({s}) ({s.Length})");
-            var count = s[1];
-            var from = s[3];
-            var to = s[5];
-            //Console.Write($"({count}) ({from}) ({to})");
-            //Console.WriteLine();
             instructions.Push(new Instruction()
             {
-                Count = int.Parse(count),
-                From = int.Parse(from),
-                To = int.Parse(to)
+                Count = int.Parse(s[1]),
+                From = int.Parse(s[3]),
+                To = int.Parse(s[5])
             });
         }
 
         var numCrates = int.Parse(lines[i + 1].Trim().Split(' ')[^1]);
-        //Console.WriteLine($"----- {numCrates}");
-
+        
         var crates = new Stack<char>[numCrates];
-        for (var n = 0; n < crates.Length; n++)
+        for (var j = 0; j < crates.Length; j++)
         {
-            crates[n] = new Stack<char>();
+            crates[j] = new Stack<char>();
         }
         
         for (var j = i+2; j < lines.Count; j++)
         {
-            var s = lines[j];
             for (var k = 0; k < numCrates; k++)
             {
-                var crate = s.Substring(1+k*4, 1)[0];
+                var crate = lines[j].Substring(1+k*4, 1)[0];
                 if (!crate.Equals(' '))
                 {
                     crates[k].Push(crate);
