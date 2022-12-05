@@ -1,29 +1,25 @@
 ﻿namespace AoC2022.Puzzles;
 
-public abstract class PuzzleBase<T, U> : IPuzzle
+public abstract class PuzzleBase<T> : IPuzzle
 {
     protected abstract string Filename { get; }
     protected abstract string PuzzleTitle { get; }
 
-    protected U PreparedInput;
+    public abstract T PartOne(IPuzzleInput input);
 
-    protected PuzzleBase() => Preprocess(new PuzzleInput(Filename));
-    protected PuzzleBase(IPuzzleInput input) => Preprocess(input);
-
-    public abstract T PartOne();
-
-    public abstract T PartTwo();
+    public abstract T PartTwo(IPuzzleInput input);
 
     public virtual void Run()
     {
+        IPuzzleInput input = new PuzzleInput(Filename);
         Console.WriteLine(PuzzleTitle);
         
+        var res = PartOne(input);
         Console.Write("Solution Part One: ");
-        Console.WriteLine(PartOne());
+        Console.WriteLine(res);
         
+        res = PartTwo(input);
         Console.Write("Solution Part Two: ");
-        Console.WriteLine(PartTwo());
+        Console.WriteLine(res);
     }
-
-    public abstract void Preprocess(IPuzzleInput input, int part = 1);
 }

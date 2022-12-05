@@ -1,54 +1,39 @@
-﻿using AoC2022.Util;
+﻿namespace AoC2022.Puzzles;
 
-namespace AoC2022.Puzzles;
-
-public class Puzzle5 : PuzzleBase<string, (Stack<char>[] SupplyCrates, Stack<Instruction> Instructions)>
+public class Puzzle5 : PuzzleBase<string>
 {
     protected override string Filename => "Input/puzzle-input-05";
     protected override string PuzzleTitle => "--- Day 5: Supply Stacks ---";
     
-    public Puzzle5() : base() { }
-    public Puzzle5(IPuzzleInput input) : base(input) { }
-    
-    public override string PartOne()
+    public override string PartOne(IPuzzleInput input)
     {
-        var (supplyCrates, instructions) = PreparedInput;
+        var (supplyCrates, instructions) = Preprocess(input);
 
-        var crateMover = new CrateMover9000(PreparedInput.SupplyCrates);
+        var crateMover = new CrateMover9000(supplyCrates);
         
-        foreach (var instruction in PreparedInput.Instructions)
+        foreach (var instruction in instructions)
         {
             crateMover.ReadInstruction(instruction);
         }
 
-        return PreparedInput.SupplyCrates.Aggregate("", (current, crate) => current + crate.Peek());
+        return supplyCrates.Aggregate("", (current, crate) => current + crate.Peek());
     }
 
-    public override string PartTwo()
+    public override string PartTwo(IPuzzleInput input)
     {
-        var crateMover = new CrateMover9001(PreparedInput.SupplyCrates);
+        var (supplyCrates, instructions) = Preprocess(input);
+
+        var crateMover = new CrateMover9001(supplyCrates);
         
-        foreach (var instruction in PreparedInput.Instructions)
+        foreach (var instruction in instructions)
         {
             crateMover.ReadInstruction(instruction);
         }
 
-        return PreparedInput.SupplyCrates.Aggregate("", (current, crate) => current + crate.Peek());
+        return supplyCrates.Aggregate("", (current, crate) => current + crate.Peek());
     }
     
-    public override void Run()
-    {
-        Console.WriteLine(PuzzleTitle);
-        
-        Console.Write("Solution Part One: ");
-        Console.WriteLine(PartOne());
-
-        Preprocess(new PuzzleInput(Filename));
-        Console.Write("Solution Part Two: ");
-        Console.WriteLine(PartTwo());
-    }
-
-    public override void Preprocess(IPuzzleInput input, int part = 1)
+    private static (Stack<char>[], Stack<Instruction>) Preprocess(IPuzzleInput input)
     {
         var lines = input.GetAllLines().Reverse().ToList();
         var instructions = new Stack<Instruction>();
@@ -84,7 +69,14 @@ public class Puzzle5 : PuzzleBase<string, (Stack<char>[] SupplyCrates, Stack<Ins
                 }
             }
         }
-        PreparedInput = (supplyCrates, instructions);
+        return (supplyCrates, instructions);
+    }
+
+    private class Instruction
+    {
+        public int Count { get; init; }
+        public int From { get; init; }
+        public int To { get; init; }
     }
 
     private abstract class CrateMover
