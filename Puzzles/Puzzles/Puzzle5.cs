@@ -3,7 +3,7 @@
 public class Puzzle5 : PuzzleBase<string>
 {
     protected override string Filename => "Input/puzzle-input-05";
-    protected override string PuzzleTitle => "--- Day 5:  ---";
+    protected override string PuzzleTitle => "--- Day 5: Supply Stacks ---";
     
     public override string PartOne(IPuzzleInput input)
     {
@@ -79,52 +79,53 @@ public class Puzzle5 : PuzzleBase<string>
         public int To { get; init; }
     }
 
-    private interface ICrateMover
+    private abstract class CrateMover
     {
-        public void ReadInstruction(Instruction instruction);
-    }
+        protected readonly Stack<char>[] SupplyCrates;
 
-    private class CrateMover9000 : ICrateMover
-    {
-        private readonly Stack<char>[] _supplyCrates;
-
-        public CrateMover9000(Stack<char>[] supplyCrates)
+        protected CrateMover(Stack<char>[] supplyCrates)
         {
-            _supplyCrates = supplyCrates;
+            SupplyCrates = supplyCrates;
         }
 
         public void ReadInstruction(Instruction instruction)
         {
-            for (var i = 0; i < instruction.Count; i++)
+            MoveCrates(instruction.Count, instruction.From, instruction.To);
+        }
+
+        protected abstract void MoveCrates(int count, int from, int to);
+    }
+
+    private class CrateMover9000 : CrateMover
+    {
+        public CrateMover9000(Stack<char>[] supplyCrates) : base(supplyCrates) { }
+
+        protected override void MoveCrates(int count, int from, int to)
+        {
+            for (var i = 0; i < count; i++)
             {
-                var crate = _supplyCrates[instruction.From].Pop();
-                _supplyCrates[instruction.To].Push(crate);
+                var crate = SupplyCrates[from].Pop();
+                SupplyCrates[to].Push(crate);
             }
         }
     }
     
-    private class CrateMover9001 : ICrateMover
+    private class CrateMover9001 : CrateMover
     {
-        private readonly Stack<char>[] _supplyCrates;
+        public CrateMover9001(Stack<char>[] supplyCrates) : base(supplyCrates) { }
 
-        public CrateMover9001(Stack<char>[] supplyCrates)
-        {
-            _supplyCrates = supplyCrates;
-        }
-
-        public void ReadInstruction(Instruction instruction)
+        protected override void MoveCrates(int count, int from, int to)
         {
             var cratesToMove = new Stack<char>();
-            for (var i = 0; i < instruction.Count; i++)
+            for (var i = 0; i < count; i++)
             {
-                cratesToMove.Push(_supplyCrates[instruction.From].Pop());
+                cratesToMove.Push(SupplyCrates[from].Pop());
             }
             
-            for (var i = 0; i < instruction.Count; i++)
+            for (var i = 0; i < count; i++)
             {
-                _supplyCrates[instruction.To].Push(cratesToMove.Pop());
+                SupplyCrates[to].Push(cratesToMove.Pop());
             }
         }
     }
-    
 }
