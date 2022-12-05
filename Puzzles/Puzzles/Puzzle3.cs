@@ -1,6 +1,6 @@
 ﻿namespace AoC2022.Puzzles;
 
-public class Puzzle3 : PuzzleBase
+public class Puzzle3 : PuzzleBase<int>
 {
     protected override string Filename => "Input/puzzle-input-03";
     protected override string PuzzleTitle => "--- Day 3: Rucksack Reorganization ---";

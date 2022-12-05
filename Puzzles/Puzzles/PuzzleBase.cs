@@ -1,13 +1,13 @@
 ﻿namespace AoC2022.Puzzles;
 
-public abstract class PuzzleBase : IPuzzle
+public abstract class PuzzleBase<T> : IPuzzle
 {
     protected abstract string Filename { get; }
     protected abstract string PuzzleTitle { get; }
 
-    public abstract int PartOne(IPuzzleInput input);
+    public abstract T PartOne(IPuzzleInput input);
 
-    public abstract int PartTwo(IPuzzleInput input);
+    public abstract T PartTwo(IPuzzleInput input);
 
     public virtual void Run()
     {

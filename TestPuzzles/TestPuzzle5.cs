@@ -10,7 +10,7 @@ public class TestPuzzle5
         var puzzle = new Puzzle5();
         var res = puzzle.PartOne(input);
         
-        Assert.Equal(input.GetAllLines().Length, res);
+        Assert.Equal("CMZ", res);
     }
     
     [Fact]
@@ -20,7 +20,7 @@ public class TestPuzzle5
         var puzzle = new Puzzle5();
         var res = puzzle.PartOne(input);
         
-        Assert.Equal(input.GetAllLines().Length, res);
+        Assert.Equal("LBLVVTVLP", res);
     }
     
     [Fact]
@@ -30,7 +30,7 @@ public class TestPuzzle5
         var puzzle = new Puzzle5();
         var res = puzzle.PartTwo(input);
         
-        Assert.Equal(input.GetAllLines().Length, res);
+        Assert.Equal("MCD", res);
     }
     
     [Fact]
@@ -40,6 +40,6 @@ public class TestPuzzle5
         var puzzle = new Puzzle5();
         var res = puzzle.PartTwo(input);
         
-        Assert.Equal(input.GetAllLines().Length, res);
+        Assert.Equal("TPFFBDRJD", res);
     }
 }

@@ -2,58 +2,46 @@
 
 namespace AoC2022.Puzzles;
 
-public class Puzzle5 : PuzzleBase
+public class Puzzle5 : PuzzleBase<string>
 {
     protected override string Filename => "Input/puzzle-input-05";
     protected override string PuzzleTitle => "--- Day 5:  ---";
     
-    public override int PartOne(IPuzzleInput input)
+    public override string PartOne(IPuzzleInput input)
     {
-        var (crates, instructions) = Preprocess(input);
+        var (supplyCrates, instructions) = Preprocess(input);
 
         foreach (var instruction in instructions)
         {
             for (var i = 0; i < instruction.Count; i++)
             {
-                var crate = crates[instruction.From-1].Pop();
-                crates[instruction.To-1].Push(crate);
+                var crate = supplyCrates[instruction.From-1].Pop();
+                supplyCrates[instruction.To-1].Push(crate);
             }
         }
 
-        foreach (var crate in crates)
-        {
-            Console.Write($"{crate.Peek()}");
-        }
-        Console.WriteLine();
-        
-        return 0;
+        return supplyCrates.Aggregate("", (current, crate) => current + crate.Peek());
     }
 
-    public override int PartTwo(IPuzzleInput input)
+    public override string PartTwo(IPuzzleInput input)
     {
-        var (crates, instructions) = Preprocess(input);
+        var (supplyCrates, instructions) = Preprocess(input);
 
         foreach (var instruction in instructions)
         {
             var cratesToMove = new Stack<char>();
             for (var i = 0; i < instruction.Count; i++)
             {
-                cratesToMove.Push(crates[instruction.From-1].Pop());
+                cratesToMove.Push(supplyCrates[instruction.From-1].Pop());
             }
             
             for (var i = 0; i < instruction.Count; i++)
             {
-                crates[instruction.To-1].Push(cratesToMove.Pop());
+                supplyCrates[instruction.To-1].Push(cratesToMove.Pop());
             }
         }
 
-        foreach (var crate in crates)
-        {
-            Console.Write($"{crate.Peek()}");
-        }
-        Console.WriteLine();
-        
-        return 0;
+        return supplyCrates.Aggregate("", (current, crate) => current + crate.Peek());
     }
     
     private static (Stack<char>[], Stack<Instruction>) Preprocess(IPuzzleInput input)
@@ -75,10 +63,10 @@ public class Puzzle5 : PuzzleBase
 
         var numCrates = int.Parse(lines[i + 1].Trim().Split(' ')[^1]);
         
-        var crates = new Stack<char>[numCrates];
-        for (var j = 0; j < crates.Length; j++)
+        var supplyCrates = new Stack<char>[numCrates];
+        for (var j = 0; j < supplyCrates.Length; j++)
         {
-            crates[j] = new Stack<char>();
+            supplyCrates[j] = new Stack<char>();
         }
         
         for (var j = i+2; j < lines.Count; j++)
@@ -88,11 +76,11 @@ public class Puzzle5 : PuzzleBase
                 var crate = lines[j].Substring(1+k*4, 1)[0];
                 if (!crate.Equals(' '))
                 {
-                    crates[k].Push(crate);
+                    supplyCrates[k].Push(crate);
                 }
             }
         }
-        return (crates, instructions);
+        return (supplyCrates, instructions);
     }
 
     private class Instruction
