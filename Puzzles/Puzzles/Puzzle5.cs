@@ -45,8 +45,8 @@ public class Puzzle5 : PuzzleBase<string>
             instructions.Push(new Instruction()
             {
                 Count = int.Parse(s[1]),
-                From = int.Parse(s[3]),
-                To = int.Parse(s[5])
+                From = int.Parse(s[3])-1,
+                To = int.Parse(s[5])-1
             });
         }
 
@@ -97,8 +97,8 @@ public class Puzzle5 : PuzzleBase<string>
         {
             for (var i = 0; i < instruction.Count; i++)
             {
-                var crate = _supplyCrates[instruction.From-1].Pop();
-                _supplyCrates[instruction.To-1].Push(crate);
+                var crate = _supplyCrates[instruction.From].Pop();
+                _supplyCrates[instruction.To].Push(crate);
             }
         }
     }
@@ -117,12 +117,12 @@ public class Puzzle5 : PuzzleBase<string>
             var cratesToMove = new Stack<char>();
             for (var i = 0; i < instruction.Count; i++)
             {
-                cratesToMove.Push(_supplyCrates[instruction.From-1].Pop());
+                cratesToMove.Push(_supplyCrates[instruction.From].Pop());
             }
             
             for (var i = 0; i < instruction.Count; i++)
             {
-                _supplyCrates[instruction.To-1].Push(cratesToMove.Pop());
+                _supplyCrates[instruction.To].Push(cratesToMove.Pop());
             }
         }
     }
