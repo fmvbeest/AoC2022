@@ -2,7 +2,7 @@
 
 namespace AoC2022.Puzzles;
 
-public class Puzzle2 : PuzzleBase<int, IEnumerable<RPS.Game>>
+public class Puzzle2 : PuzzleBase<int, IEnumerable<Game>>
 {
     protected override string Filename => "Input/puzzle-input-02";
     protected override string PuzzleTitle => "--- Day 2: Rock Paper Scissors ---";
@@ -12,17 +12,17 @@ public class Puzzle2 : PuzzleBase<int, IEnumerable<RPS.Game>>
     
     public override int PartOne()
     {
-        return PreparedInput.Sum(RPS.GameRules.GetPoints);
+        return PreparedInput.Sum(GameRules.GetPoints);
     }
 
     public override int PartTwo()
     {
-        return PreparedInput.Sum(game => RPS.GameRules.GetPoints(RPS.GameRules.FixGame(game)));
+        return PreparedInput.Sum(game => GameRules.GetPoints(GameRules.FixGame(game)));
     }
 
     public override void Preprocess(IPuzzleInput input, int part = 1)
     {
-        PreparedInput = input.GetAllLines().Select(line => new RPS.Game()
+        PreparedInput = input.GetAllLines().Select(line => new Game()
         {
             TheirMove = ParseMove(line[0]), 
             OurMove = ParseMove(line[2]), 
@@ -30,22 +30,22 @@ public class Puzzle2 : PuzzleBase<int, IEnumerable<RPS.Game>>
         }).ToList();
     }
 
-    private static RPS.GameRules.Move ParseMove(char move) => move switch
+    private static GameRules.Move ParseMove(char move) => move switch
     {
-        'A' => RPS.GameRules.Move.Rock,
-        'B' => RPS.GameRules.Move.Paper,
-        'C' => RPS.GameRules.Move.Scissor,
-        'X' => RPS.GameRules.Move.Rock,
-        'Y' => RPS.GameRules.Move.Paper,
-        'Z' => RPS.GameRules.Move.Scissor,
+        'A' => GameRules.Move.Rock,
+        'B' => GameRules.Move.Paper,
+        'C' => GameRules.Move.Scissor,
+        'X' => GameRules.Move.Rock,
+        'Y' => GameRules.Move.Paper,
+        'Z' => GameRules.Move.Scissor,
         _ => throw new ArgumentOutOfRangeException(nameof(move), move, "Unexpected move")
     };
         
-    private static RPS.GameRules.Result ParseOutcome(char move) => move switch
+    private static GameRules.Result ParseOutcome(char move) => move switch
     {
-        'X' => RPS.GameRules.Result.Loss,
-        'Y' => RPS.GameRules.Result.Draw,
-        'Z' => RPS.GameRules.Result.Win,
+        'X' => GameRules.Result.Loss,
+        'Y' => GameRules.Result.Draw,
+        'Z' => GameRules.Result.Win,
         _ => throw new ArgumentOutOfRangeException(nameof(move), move, "Unexpected outcome")
     };
 }
