@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace AoC2022.Puzzles;
+﻿namespace AoC2022.Puzzles;
 
 public class Puzzle5 : PuzzleBase<string>
 {
@@ -11,13 +9,11 @@ public class Puzzle5 : PuzzleBase<string>
     {
         var (supplyCrates, instructions) = Preprocess(input);
 
+        var crateMover = new CrateMover9000(supplyCrates);
+        
         foreach (var instruction in instructions)
         {
-            for (var i = 0; i < instruction.Count; i++)
-            {
-                var crate = supplyCrates[instruction.From-1].Pop();
-                supplyCrates[instruction.To-1].Push(crate);
-            }
+            crateMover.ReadInstruction(instruction);
         }
 
         return supplyCrates.Aggregate("", (current, crate) => current + crate.Peek());
@@ -27,18 +23,11 @@ public class Puzzle5 : PuzzleBase<string>
     {
         var (supplyCrates, instructions) = Preprocess(input);
 
+        var crateMover = new CrateMover9001(supplyCrates);
+        
         foreach (var instruction in instructions)
         {
-            var cratesToMove = new Stack<char>();
-            for (var i = 0; i < instruction.Count; i++)
-            {
-                cratesToMove.Push(supplyCrates[instruction.From-1].Pop());
-            }
-            
-            for (var i = 0; i < instruction.Count; i++)
-            {
-                supplyCrates[instruction.To-1].Push(cratesToMove.Pop());
-            }
+            crateMover.ReadInstruction(instruction);
         }
 
         return supplyCrates.Aggregate("", (current, crate) => current + crate.Peek());
@@ -89,4 +78,53 @@ public class Puzzle5 : PuzzleBase<string>
         public int From { get; init; }
         public int To { get; init; }
     }
+
+    private interface ICrateMover
+    {
+        public void ReadInstruction(Instruction instruction);
+    }
+
+    private class CrateMover9000 : ICrateMover
+    {
+        private readonly Stack<char>[] _supplyCrates;
+
+        public CrateMover9000(Stack<char>[] supplyCrates)
+        {
+            _supplyCrates = supplyCrates;
+        }
+
+        public void ReadInstruction(Instruction instruction)
+        {
+            for (var i = 0; i < instruction.Count; i++)
+            {
+                var crate = _supplyCrates[instruction.From-1].Pop();
+                _supplyCrates[instruction.To-1].Push(crate);
+            }
+        }
+    }
+    
+    private class CrateMover9001 : ICrateMover
+    {
+        private readonly Stack<char>[] _supplyCrates;
+
+        public CrateMover9001(Stack<char>[] supplyCrates)
+        {
+            _supplyCrates = supplyCrates;
+        }
+
+        public void ReadInstruction(Instruction instruction)
+        {
+            var cratesToMove = new Stack<char>();
+            for (var i = 0; i < instruction.Count; i++)
+            {
+                cratesToMove.Push(_supplyCrates[instruction.From-1].Pop());
+            }
+            
+            for (var i = 0; i < instruction.Count; i++)
+            {
+                _supplyCrates[instruction.To-1].Push(cratesToMove.Pop());
+            }
+        }
+    }
+    
 }
