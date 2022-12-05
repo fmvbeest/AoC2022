@@ -13,7 +13,7 @@ public class Puzzle5 : PuzzleBase
 
         foreach (var instruction in instructions)
         {
-            for (var i =0; i < instruction.Count; i++)
+            for (var i = 0; i < instruction.Count; i++)
             {
                 var crate = crates[instruction.From-1].Pop();
                 crates[instruction.To-1].Push(crate);
@@ -64,12 +64,12 @@ public class Puzzle5 : PuzzleBase
         for (i = 0; !string.IsNullOrEmpty(lines[i]); i++)
         {
             var s = lines[i].Split(' ');
-            Console.WriteLine($"({s}) ({s.Length})");
+            //Console.WriteLine($"({s}) ({s.Length})");
             var count = s[1];
             var from = s[3];
             var to = s[5];
-            Console.Write($"({count}) ({from}) ({to})");
-            Console.WriteLine();
+            //Console.Write($"({count}) ({from}) ({to})");
+            //Console.WriteLine();
             instructions.Push(new Instruction()
             {
                 Count = int.Parse(count),
@@ -79,18 +79,18 @@ public class Puzzle5 : PuzzleBase
         }
 
         var numCrates = int.Parse(lines[i + 1].Trim().Split(' ')[^1]);
-        Console.WriteLine($"----- {numCrates}");
+        //Console.WriteLine($"----- {numCrates}");
 
         var crates = new Stack<char>[numCrates];
-        for (int n = 0; n < crates.Length; n++)
+        for (var n = 0; n < crates.Length; n++)
         {
             crates[n] = new Stack<char>();
         }
         
-        for (int j = i+2; j < lines.Count; j++)
+        for (var j = i+2; j < lines.Count; j++)
         {
             var s = lines[j];
-            for (int k = 0; k < numCrates; k++)
+            for (var k = 0; k < numCrates; k++)
             {
                 var crate = s.Substring(1+k*4, 1)[0];
                 if (!crate.Equals(' '))
@@ -104,8 +104,8 @@ public class Puzzle5 : PuzzleBase
 
     private class Instruction
     {
-        public int Count { get; set; }
-        public int From { get; set; }
-        public int To { get; set; }
+        public int Count { get; init; }
+        public int From { get; init; }
+        public int To { get; init; }
     }
 }
