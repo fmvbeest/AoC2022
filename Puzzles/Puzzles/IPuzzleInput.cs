@@ -3,4 +3,6 @@
 public interface IPuzzleInput
 {
     public IEnumerable<string> GetInput();
+
+    public string GetFirstLine();
 }
