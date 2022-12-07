@@ -1,25 +1,18 @@
-﻿using System.ComponentModel;
-
-namespace AoC2022.Util;
+﻿namespace AoC2022.Util;
 
 public interface INode
 {
     public string Name { get; set; }
-
     public bool IsDirectory();
-
-    public bool IsRoot();
-
-    public Directory? GetParent();
+    public Directory GetParent();
 }
 
 public class Directory : INode
 {
     public string Name { get; set; }
+    
     private readonly bool _isDirectory;
-
-    private readonly Directory? _parent;
-
+    private readonly Directory _parent;
     private readonly List<Directory> _directories;
     private readonly List<File> _files;
 
@@ -37,12 +30,7 @@ public class Directory : INode
         return _isDirectory;
     }
 
-    public bool IsRoot()
-    {
-        return (_parent == null);
-    }
-
-    public Directory? GetParent()
+    public Directory GetParent()
     {
         return _parent;
     }
@@ -56,38 +44,20 @@ public class Directory : INode
     {
         _files.Add(file);
     }
-    
-    public IEnumerable<INode> GetDirectories()
-    {
-        return _directories;
-    }
 
     public bool ContainsDirectory(string name)
     {
-        return _directories.Any(node => node.Name.Equals(name));
+        return _directories.Any(d => d.Name.Equals(name));
     }
 
-    public Directory? GetDirectory(string name)
+    public Directory GetDirectory(string name)
     {
-        Directory res = null;
-        foreach (var dir in _directories.Where(node => node.Name.Equals(name)))
-        {
-            res = dir;
-        }
-
-        return res;
+        return _directories.First(d => d.Name.Equals(name));
     }
 
     public long Size()
     {
-        long size = _files.Sum(file => file.Size);
-
-        foreach (var dir in _directories)
-        {
-            size += dir.Size();
-        }
-
-        return size;
+        return _files.Sum(file => file.Size) + _directories.Sum(dir => dir.Size());
     }
 
     public List<Directory> ListDirectories(List<Directory> list)
@@ -100,16 +70,15 @@ public class Directory : INode
 
         return list;
     }
-
 }
 
 public class File : INode
 {
     public string Name { get; set; }
     private readonly bool _isDirectory;
-
-    private readonly Directory? _parent;
-    public long Size { get; set; }
+    private readonly Directory _parent;
+    
+    public long Size { get; }
     
     public File(string name, long size, Directory parent)
     {
@@ -124,12 +93,7 @@ public class File : INode
         return _isDirectory;
     }
 
-    public bool IsRoot()
-    {
-        return (_parent == null);
-    }
-
-    public Directory? GetParent()
+    public Directory GetParent()
     {
         return _parent;
     }

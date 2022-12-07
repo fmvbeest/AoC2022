@@ -41,46 +41,34 @@ public class Puzzle7 : PuzzleBase<long, Directory>
         {
             if (line[0] == '$')
             {
-                //Console.WriteLine(line);
                 var s = line.Split(' ');
                 if (s[1].Equals("cd"))
                 {
-                    if (s[2].Equals("/"))
+                    switch (s[2])
                     {
-                        current = root;
-                    } else if (s[2].Equals(".."))
-                    {
-                        //Console.WriteLine("Go up");
-                        if (current.IsRoot())
-                        {
-                            Console.WriteLine("already in root");
-                        }
-                        else
-                        {
+                        case "/":
+                            current = root;
+                            break;
+                        case "..":
                             current = current.GetParent();
-                        }
-                    }
-                    else
-                    {
-                        //Console.WriteLine($"cd into {s[2]}");
-                        if (!current.ContainsDirectory(s[2]))
+                            break;
+                        default:
                         {
-                            //Console.WriteLine($"Directory {s[2]} does not exist.");
-                        }
-                        else
-                        {
-                            current = current.GetDirectory(s[2]);
+                            if (current.ContainsDirectory(s[2]))
+                            {
+                                current = current.GetDirectory(s[2]);
+                            }
+
+                            break;
                         }
                     }
                 }
             }
             else
             {
-                //Console.WriteLine(line);
                 var s = line.Split(' ');
                 if (s[0] == "dir")
                 {
-                    //Console.WriteLine($"Directory {s[1]}");
                     var dir = new Directory(s[1], current);
                     current.AddDir(dir);
                 }
