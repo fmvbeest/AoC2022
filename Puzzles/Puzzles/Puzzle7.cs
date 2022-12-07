@@ -11,23 +11,16 @@ public class Puzzle7 : PuzzleBase<long, Directory>
 
     public override long PartOne(Directory root)
     {
-        var directories = root.ListDirectories(new List<Directory>(){root});
-
-        return directories.Select(dir => dir.Size()).Where(size => size <= 100000).Sum();
+        return root.ListDirectories(new List<Directory> {root}).Select(dir => dir.Size()).Where(size => size <= 100000).Sum();
     }
 
     public override long PartTwo(Directory root)
     {
         const int totalSize = 70000000;
         const int requiredSpace = 30000000;
-        
         var spaceToFreeUp = requiredSpace - (totalSize - root.Size());
-        
-        var directories = root.ListDirectories(new List<Directory>(){root});
 
-        var removeCandidates = directories.Select(d => d).Where(d => d.Size() >= spaceToFreeUp).ToList();
-
-        return removeCandidates.Select(dir => dir.Size()).Prepend(totalSize).Min();
+        return root.ListDirectories(new List<Directory>{root}).Select(dir => dir.Size()).Where(size => size >= spaceToFreeUp).Min();
     }
     
     public override Directory Preprocess(IPuzzleInput input, int part = 1)
