@@ -37,12 +37,7 @@ public class Puzzle7 : PuzzleBase<long, Directory>
         var directories = root.ListDirectories(new List<Directory>(){root});
 
         var tofree = requiredSpace - (totalsize - root.Size());
-        
-        foreach (var dir in directories)
-        {
-            Console.WriteLine($"{dir.Name} {dir.Size()}");
-        }
-        
+
         var dirtoremove = directories.Select(d => d).Where(d => d.Size() >= tofree).ToList();
 
         long minSize = 70000000;
