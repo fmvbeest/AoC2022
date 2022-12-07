@@ -7,7 +7,7 @@ namespace AoC2022.Puzzles;
 public class Puzzle7 : PuzzleBase<long, Directory>
 {
     protected override string Filename => "Input/puzzle-input-07";
-    protected override string PuzzleTitle => "--- Day 7: ---";
+    protected override string PuzzleTitle => "--- Day 7: No Space Left On Device ---";
 
     public override long PartOne(Directory root)
     {
