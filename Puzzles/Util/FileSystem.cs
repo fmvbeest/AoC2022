@@ -10,8 +10,6 @@ public interface INode
 public class Directory : INode
 {
     public string Name { get; set; }
-    
-    private readonly bool _isDirectory;
     private readonly Directory _parent;
     private readonly List<Directory> _directories;
     private readonly List<File> _files;
@@ -19,21 +17,14 @@ public class Directory : INode
     public Directory(string name, Directory parent)
     {
         Name = name;
-        _isDirectory = true;
         _directories = new List<Directory>();
         _files = new List<File>();
         _parent = parent;
     }
 
-    public bool IsDirectory()
-    {
-        return _isDirectory;
-    }
+    public bool IsDirectory() => true;
 
-    public Directory GetParent()
-    {
-        return _parent;
-    }
+    public Directory GetParent() => _parent;
 
     public void AddDir(Directory directory)
     {
@@ -75,7 +66,6 @@ public class Directory : INode
 public class File : INode
 {
     public string Name { get; set; }
-    private readonly bool _isDirectory;
     private readonly Directory _parent;
     
     public long Size { get; }
@@ -85,16 +75,9 @@ public class File : INode
         Name = name;
         Size = size;
         _parent = parent;
-        _isDirectory = false;
     }
     
-    public bool IsDirectory()
-    {
-        return _isDirectory;
-    }
+    public bool IsDirectory() => false;
 
-    public Directory GetParent()
-    {
-        return _parent;
-    }
+    public Directory GetParent() => _parent;
 }
