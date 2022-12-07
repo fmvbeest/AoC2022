@@ -26,25 +26,13 @@ public class Directory : INode
 
     public Directory GetParent() => _parent;
 
-    public void AddDir(Directory directory)
-    {
-        _directories.Add(directory);
-    }
+    public void AddDir(Directory directory) => _directories.Add(directory);
 
-    public void AddFile(File file)
-    {
-        _files.Add(file);
-    }
+    public void AddFile(File file) => _files.Add(file);
 
-    public bool ContainsDirectory(string name)
-    {
-        return _directories.Any(d => d.Name.Equals(name));
-    }
+    public bool ContainsDirectory(string name) => _directories.Any(d => d.Name.Equals(name));
 
-    public Directory GetDirectory(string name)
-    {
-        return _directories.First(d => d.Name.Equals(name));
-    }
+    public Directory GetDirectory(string name) => _directories.First(d => d.Name.Equals(name));
 
     public long Size()
     {
