@@ -13,43 +13,21 @@ public class Puzzle7 : PuzzleBase<long, Directory>
     {
         var directories = root.ListDirectories(new List<Directory>(){root});
 
-        long size = 0;
-
-        foreach (var dir in directories)
-        {
-            var dirsize = dir.Size();
-            if (dirsize <= 100000)
-            {
-                size += dirsize;
-            }
-                
-        }
-
-        return size;
+        return directories.Select(dir => dir.Size()).Where(dirsize => dirsize <= 100000).Sum();
     }
 
     public override long PartTwo(Directory root)
     {
-        var totalsize = 70000000;
-
-        var requiredSpace = 30000000;
+        const int totalSize = 70000000;
+        const int requiredSpace = 30000000;
+        
+        var spaceToFreeUp = requiredSpace - (totalSize - root.Size());
         
         var directories = root.ListDirectories(new List<Directory>(){root});
 
-        var tofree = requiredSpace - (totalsize - root.Size());
+        var removeCandidates = directories.Select(d => d).Where(d => d.Size() >= spaceToFreeUp).ToList();
 
-        var dirtoremove = directories.Select(d => d).Where(d => d.Size() >= tofree).ToList();
-
-        long minSize = 70000000;
-        foreach (var dir in dirtoremove)
-        {
-            if (dir.Size() < minSize)
-            {
-                minSize = dir.Size();
-            }
-        }
-
-        return minSize;
+        return removeCandidates.Select(dir => dir.Size()).Prepend(totalSize).Min();
     }
     
     public override Directory Preprocess(IPuzzleInput input, int part = 1)
