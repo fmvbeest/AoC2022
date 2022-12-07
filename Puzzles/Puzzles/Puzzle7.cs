@@ -16,10 +16,7 @@ public class Puzzle7 : PuzzleBase<long, Directory>
 
     public override long PartTwo(Directory root)
     {
-        const int totalSize = 70000000;
-        const int requiredSpace = 30000000;
-        var spaceToFreeUp = requiredSpace - (totalSize - root.Size());
-
+        var spaceToFreeUp = 30000000 - (70000000 - root.Size());
         return root.ListDirectories(new List<Directory>{root}).Select(dir => dir.Size()).Where(size => size >= spaceToFreeUp).Min();
     }
     
