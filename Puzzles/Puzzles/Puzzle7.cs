@@ -75,13 +75,11 @@ public class Puzzle7 : PuzzleBase<long, Directory>
         var s = line.Split(' ');
         if (s[0] == "dir")
         {
-            var dir = new Directory(s[1], current);
-            current.AddDir(dir);
+            current.AddDir(new Directory(s[1], current));
         }
         else
         {
-            var file = new File(s[1], long.Parse(s[0]), current);
-            current.AddFile(file);
+            current.AddFile(new File(s[1], long.Parse(s[0]), current));
         }
         return current;
     }
