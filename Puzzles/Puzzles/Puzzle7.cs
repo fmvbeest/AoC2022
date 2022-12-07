@@ -13,7 +13,7 @@ public class Puzzle7 : PuzzleBase<long, Directory>
     {
         var directories = root.ListDirectories(new List<Directory>(){root});
 
-        return directories.Select(dir => dir.Size()).Where(dirsize => dirsize <= 100000).Sum();
+        return directories.Select(dir => dir.Size()).Where(size => size <= 100000).Sum();
     }
 
     public override long PartTwo(Directory root)
@@ -39,47 +39,50 @@ public class Puzzle7 : PuzzleBase<long, Directory>
 
         foreach (var line in lines)
         {
-            if (line[0] == '$')
-            {
-                var s = line.Split(' ');
-                if (s[1].Equals("cd"))
-                {
-                    switch (s[2])
-                    {
-                        case "/":
-                            current = root;
-                            break;
-                        case "..":
-                            current = current.GetParent();
-                            break;
-                        default:
-                        {
-                            if (current.ContainsDirectory(s[2]))
-                            {
-                                current = current.GetDirectory(s[2]);
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                var s = line.Split(' ');
-                if (s[0] == "dir")
-                {
-                    var dir = new Directory(s[1], current);
-                    current.AddDir(dir);
-                }
-                else
-                {
-                    var file = new File(s[1], long.Parse(s[0]), current);
-                    current.AddFile(file);
-                }
-            }
+            current = line[0] == '$' ? ProcessCommand(line, current, root) : AddContent(line, current);
         }
 
         return root;
+    }
+
+    private static Directory ProcessCommand(string cmd, Directory current, Directory root)
+    {
+        var s = cmd.Split(' ');
+        if (!s[1].Equals("cd")) return current;
+        switch (s[2])
+        {
+            case "/":
+                current = root;
+                break;
+            case "..":
+                current = current.GetParent();
+                break;
+            default:
+            {
+                if (current.ContainsDirectory(s[2]))
+                {
+                    current = current.GetDirectory(s[2]);
+                }
+                break;
+            }
+        }
+
+        return current;
+    }
+
+    private static Directory AddContent(string line, Directory current)
+    {
+        var s = line.Split(' ');
+        if (s[0] == "dir")
+        {
+            var dir = new Directory(s[1], current);
+            current.AddDir(dir);
+        }
+        else
+        {
+            var file = new File(s[1], long.Parse(s[0]), current);
+            current.AddFile(file);
+        }
+        return current;
     }
 }
