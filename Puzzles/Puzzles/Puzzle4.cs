@@ -1,6 +1,6 @@
 ﻿namespace AoC2022.Puzzles;
 
-public class Puzzle4 : PuzzleBase<int, IEnumerable<(Range a, Range b)>>
+public class Puzzle4 : PuzzleBase<IEnumerable<(Range a, Range b)>, int, int>
 {
     protected override string Filename => "Input/puzzle-input-04";
     protected override string PuzzleTitle => "--- Day 4: Camp Cleanup ---";

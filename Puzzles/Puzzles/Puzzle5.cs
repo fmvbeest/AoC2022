@@ -2,7 +2,7 @@
 
 namespace AoC2022.Puzzles;
 
-public class Puzzle5 : PuzzleBase<string, (Stack<char>[], Stack<Instruction>)>
+public class Puzzle5 : PuzzleBase<(Stack<char>[], Stack<Instruction>), string, string>
 {
     protected override string Filename => "Input/puzzle-input-05";
     protected override string PuzzleTitle => "--- Day 5: Supply Stacks ---";

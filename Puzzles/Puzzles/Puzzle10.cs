@@ -3,7 +3,7 @@ using System.Text;
 
 namespace AoC2022.Puzzles;
 
-public class Puzzle10 : PuzzleBase<int, string[]>
+public class Puzzle10 : PuzzleBase<string[], int, string>
 {
     protected override string Filename => "Input/puzzle-input-10";
     protected override string PuzzleTitle => "--- Day 10: Cathode-Ray Tube ---";
@@ -44,7 +44,7 @@ public class Puzzle10 : PuzzleBase<int, string[]>
         return signalStrength;
     }
 
-    public override int PartTwo(string[] input)
+    public override string PartTwo(string[] input)
     {
         var cycle = 0;
         var cpu = new CPU() { Register = 1 };
@@ -73,9 +73,7 @@ public class Puzzle10 : PuzzleBase<int, string[]>
         
         Console.WriteLine();
         var image = crt.Render();
-        Console.Write(image);
-
-        return image.GetHashCode();
+        return image;
     }
     
     public override string[] Preprocess(IPuzzleInput input, int part = 1)
@@ -129,7 +127,7 @@ public class Puzzle10 : PuzzleBase<int, string[]>
 
         public string Render()
         {
-            return _screen.Aggregate(string.Empty, (current, screenRow) => current + (string.Join(" ", screenRow) + '\n'));
+            return _screen.Aggregate(string.Empty, (current, screenRow) => current + (string.Join("", screenRow) + '\n'));
         }
     }
 }

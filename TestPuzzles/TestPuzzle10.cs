@@ -22,12 +22,24 @@ public class TestPuzzle10
     [Fact]
     public void TestPartTwoSample()
     {
-        Assert.Equal(2681320, _puzzle.PartTwo(_puzzle.Preprocess(_testInput)));
+        const string screen = "##..##..##..##..##..##..##..##..##..##..\n" +
+                              "###...###...###...###...###...###...###.\n" +
+                              "####....####....####....####....####....\n" +
+                              "#####.....#####.....#####.....#####.....\n" +
+                              "######......######......######......####\n" +
+                              "#######.......#######.......#######.....\n";
+        Assert.Equal(screen, _puzzle.PartTwo(_puzzle.Preprocess(_testInput)));
     }
     
     [Fact]
     public void TestPartTwoActual()
     {
-        Assert.Equal(2331, _puzzle.PartTwo(_puzzle.Preprocess(_puzzleInput)));
+        const string screen = "###..#..#..##...##...##..###..#..#.####.\n" +
+                              "#..#.#..#.#..#.#..#.#..#.#..#.#..#....#.\n" +
+                              "###..#..#.#....#..#.#....###..#..#...#..\n" +
+                              "#..#.#..#.#....####.#....#..#.#..#..#...\n" +
+                              "#..#.#..#.#..#.#..#.#..#.#..#.#..#.#....\n" +
+                              "###...##...##..#..#..##..###...##..####.\n";
+        Assert.Equal(screen, _puzzle.PartTwo(_puzzle.Preprocess(_puzzleInput)));
     }
 }

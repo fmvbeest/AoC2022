@@ -8,9 +8,10 @@ public static class Program
      public static void Main(string[] args)
      {
           var puzzles = Assembly.GetExecutingAssembly().GetTypes()
-               .Where(t => t.GetInterfaces().Contains(typeof(IPuzzle)) && !t.Name.StartsWith(nameof(PuzzleBase<object,object>))).ToList();
+               .Where(t => t.GetInterfaces().Contains(typeof(IPuzzle)) && !t.Name.StartsWith(nameof(PuzzleBase<object,object, object>))).ToList();
 
           var implementedPuzzles = puzzles.Select(p => int.Parse(p.Name[6..])).ToArray();
+          Array.Sort(implementedPuzzles);
           
           Console.WriteLine("*** AoC2022 ***");
           Console.WriteLine($"Choose a puzzle to run [{string.Join(", ", implementedPuzzles)}]");

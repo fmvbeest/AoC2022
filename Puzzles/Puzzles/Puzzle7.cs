@@ -3,7 +3,7 @@ using File = AoC2022.Util.File;
 
 namespace AoC2022.Puzzles;
 
-public class Puzzle7 : PuzzleBase<long, Directory>
+public class Puzzle7 : PuzzleBase<Directory, long, long>
 {
     protected override string Filename => "Input/puzzle-input-07";
     protected override string PuzzleTitle => "--- Day 7: No Space Left On Device ---";
