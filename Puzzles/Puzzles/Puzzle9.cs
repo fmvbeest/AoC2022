@@ -1,6 +1,4 @@
 ﻿using AoC2022.Util;
-using Directory = AoC2022.Util.Directory;
-using File = AoC2022.Util.File;
 
 namespace AoC2022.Puzzles;
 
@@ -11,26 +9,12 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
 
     public override int PartOne(IEnumerable<(char, int)> input)
     {
-        var rope = new Rope(new Coordinate(0, 0),2);
-
-        foreach (var (direction, count) in input)
-        {
-            rope.MoveHead(direction, count);
-        }
-        
-        return rope.GetVisited().Distinct().Count();
+        return SimulateRope(2, input);
     }
 
     public override int PartTwo(IEnumerable<(char, int)> input)
     {
-        var rope = new Rope(new Coordinate(0, 0), 10);
-
-        foreach (var (direction, count) in input)
-        {
-            rope.MoveHead(direction, count);
-        }
-        
-        return rope.GetVisited().Distinct().Count();
+        return SimulateRope(10, input);
     }
     
     public override IEnumerable<(char, int)> Preprocess(IPuzzleInput input, int part = 1)
@@ -38,24 +22,37 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
         return input.GetInput().Select(line => line.Split(' ')).Select(s => (s[0][0], int.Parse(s[1]))).ToList();
     }
 
+    private static int SimulateRope(int length, IEnumerable<(char, int)> input)
+    {
+        var rope = new Rope(new Coordinate(0, 0), length);
+
+        foreach (var (direction, count) in input)
+        {
+            rope.MoveHead(direction, count);
+        }
+        
+        return rope.GetVisited().Distinct().Count();
+    }
+
     private static Coordinate MoveRight(Coordinate pos)
     {
-        return new Coordinate(pos.X+1, pos.Y);
+        //return new Coordinate(pos.X, pos.Y) + new Coordinate(1,0);
+        return pos + new Coordinate(1,0);
     }
     
     private static Coordinate MoveUp(Coordinate pos)
     {
-        return new Coordinate(pos.X, pos.Y+1);
+        return pos + new Coordinate(0,1);
     }
     
     private static Coordinate MoveLeft(Coordinate pos)
     {
-        return new Coordinate(pos.X-1, pos.Y);
+        return pos + new Coordinate(-1,0);
     }
     
     private static Coordinate MoveDown(Coordinate pos)
     {
-        return new Coordinate(pos.X, pos.Y-1);
+        return pos + new Coordinate(0,-1);
     }
 
     private class Rope
@@ -101,12 +98,12 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
             {
                 var prev = _rope[i-1];
                 var curr = _rope[i];
+                if (prev.IsAdjacentTo(curr))
+                {
+                    return;
+                }
                 var diff = prev - curr;
                 
-                if (diff.IsAdjacentTo(new Coordinate(0,0)))
-                {
-                    break;
-                }
                 if (diff.Equals(new Coordinate(2, 0)))
                 {
                     _rope[i] = curr + new Coordinate(1, 0);

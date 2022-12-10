@@ -2,16 +2,16 @@
 
 public class Coordinate : IEquatable<Coordinate>
 {
-    private readonly (int, int) _pos;
+    private readonly (int x, int y) _pos;
 
     public Coordinate(int x, int y)
     {
         _pos = (x, y);
     }
         
-    public int X => _pos.Item1;
+    public int X => _pos.x;
 
-    public int Y => _pos.Item2;
+    public int Y => _pos.y;
 
     public bool Equals(Coordinate? other)
     {
