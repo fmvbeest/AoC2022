@@ -28,6 +28,8 @@ public class Coordinate : IEquatable<Coordinate>
     public static Coordinate operator -(Coordinate a) => new(-a.X, -a.Y);
     public static Coordinate operator +(Coordinate a, Coordinate b) => new(a.X + b.X, a.Y + b.Y);
     public static Coordinate operator -(Coordinate a, Coordinate b) => a + (-b);
+    
+    
 
     public bool IsAdjacentTo(Coordinate x)
     {
@@ -40,4 +42,8 @@ public class Coordinate : IEquatable<Coordinate>
         return diff is { X: 0, Y: 1 } or { X: 1, Y: 0 } or { X: 0, Y: -1 } or { X: -1, Y: 0 };
     }
 
+    public static implicit operator Coordinate((int x, int y) tuple)
+    {
+        return new Coordinate(tuple.x, tuple.y);
+    }
 }

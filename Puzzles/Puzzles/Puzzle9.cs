@@ -28,31 +28,10 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
 
         foreach (var (direction, count) in input)
         {
-            rope.MoveHead(direction, count);
+            rope.SimulateStep(direction, count);
         }
         
         return rope.GetVisited().Distinct().Count();
-    }
-
-    private static Coordinate MoveRight(Coordinate pos)
-    {
-        //return new Coordinate(pos.X, pos.Y) + new Coordinate(1,0);
-        return pos + new Coordinate(1,0);
-    }
-    
-    private static Coordinate MoveUp(Coordinate pos)
-    {
-        return pos + new Coordinate(0,1);
-    }
-    
-    private static Coordinate MoveLeft(Coordinate pos)
-    {
-        return pos + new Coordinate(-1,0);
-    }
-    
-    private static Coordinate MoveDown(Coordinate pos)
-    {
-        return pos + new Coordinate(0,-1);
     }
 
     private class Rope
@@ -71,28 +50,23 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
             _visited.Add(start);
         }
 
-        public override string ToString()
-        {
-            return _rope.Aggregate(string.Empty, (current, knot) => current + knot);
-        }
-
-        public void MoveHead(char direction, int count)
+        public void SimulateStep(char direction, int count)
         {
             for (var i = 0; i < count; i++)
             {
                 _rope[0] = direction switch
                 {
-                    'R' => MoveRight(_rope[0]),
-                    'U' => MoveUp(_rope[0]),
-                    'L' => MoveLeft(_rope[0]),
-                    'D' => MoveDown(_rope[0]),
+                    'R' => _rope[0] + (1, 0),
+                    'U' => _rope[0] + (0, 1),
+                    'L' => _rope[0] + (-1, 0),
+                    'D' => _rope[0] + (0, -1),
                     _ => _rope[0]
                 };
-                PropagateStep(direction);
+                PropagateStep();
             }
         }
 
-        private void PropagateStep(char move)
+        private void PropagateStep()
         {
             for (var i = 1; i < _rope.Count; i++)
             {
@@ -102,33 +76,33 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
                 {
                     return;
                 }
-                var diff = prev - curr;
                 
-                if (diff.Equals(new Coordinate(2, 0)))
+                var diff = prev - curr;
+                if (diff.Equals((2,0)))
                 {
-                    _rope[i] = curr + new Coordinate(1, 0);
+                    _rope[i] = curr + (1,0);
                 } else 
-                if (diff.Equals(new Coordinate(0, -2)))
+                if (diff.Equals((0, -2)))
                 {
-                    _rope[i] = curr + new Coordinate(0, -1);
-                } else if (diff.Equals(new Coordinate(-2, 0)))
+                    _rope[i] = curr + (0, -1);
+                } else if (diff.Equals((-2, 0)))
                 {
-                    _rope[i] = curr + new Coordinate(-1, 0);
-                } else if (diff.Equals(new Coordinate(0, 2)))
+                    _rope[i] = curr + (-1, 0);
+                } else if (diff.Equals((0, 2)))
                 {
-                    _rope[i] = curr + new Coordinate(0, 1);
-                } else if (diff.Equals(new Coordinate(1, 2)) || diff.Equals(new Coordinate(2, 1)) || diff.Equals(new Coordinate(2, 2)))
+                    _rope[i] = curr + (0, 1);
+                } else if (diff.Equals((1, 2)) || diff.Equals((2, 1)) || diff.Equals((2, 2)))
                 {
-                    _rope[i] = curr + new Coordinate(1, 1);
-                } else if (diff.Equals(new Coordinate(1, -2)) || diff.Equals(new Coordinate(2, -1)) || diff.Equals(new Coordinate(2, -2)))
+                    _rope[i] = curr + (1, 1);
+                } else if (diff.Equals((1, -2)) || diff.Equals((2, -1)) || diff.Equals((2, -2)))
                 {
-                    _rope[i] = curr + new Coordinate(1, -1);
-                } else if (diff.Equals(new Coordinate(-1, -2)) || diff.Equals(new Coordinate(-2, -1)) || diff.Equals(new Coordinate(-2, -2)))
+                    _rope[i] = curr + (1, -1);
+                } else if (diff.Equals((-1, -2)) || diff.Equals((-2, -1)) || diff.Equals((-2, -2)))
                 {
-                    _rope[i] = curr + new Coordinate(-1, -1);
-                } else if (diff.Equals(new Coordinate(-1, 2)) || diff.Equals(new Coordinate(-2, 1)) || diff.Equals(new Coordinate(-2, 2)))
+                    _rope[i] = curr + (-1, -1);
+                } else if (diff.Equals((-1, 2)) || diff.Equals((-2, 1)) || diff.Equals((-2, 2)))
                 {
-                    _rope[i] = curr + new Coordinate(-1, 1);
+                    _rope[i] = curr + (-1, 1);
                 }
 
                 if (i == _rope.Count - 1)
@@ -141,6 +115,11 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
         public IEnumerable<Coordinate> GetVisited()
         {
             return _visited;
+        }
+        
+        public override string ToString()
+        {
+            return _rope.Aggregate(string.Empty, (current, knot) => current + knot);
         }
     }
 }
