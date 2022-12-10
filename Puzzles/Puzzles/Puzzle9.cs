@@ -70,39 +70,37 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
         {
             for (var i = 1; i < _rope.Count; i++)
             {
-                var prev = _rope[i-1];
-                var curr = _rope[i];
-                if (prev.IsAdjacentTo(curr))
+                if (_rope[i-1].IsAdjacentTo(_rope[i]))
                 {
                     return;
                 }
                 
-                var diff = prev - curr;
+                var diff = _rope[i-1] - _rope[i];
                 if (diff.Equals((2,0)))
                 {
-                    _rope[i] = curr + (1,0);
+                    _rope[i] += (1,0);
                 } else 
                 if (diff.Equals((0, -2)))
                 {
-                    _rope[i] = curr + (0, -1);
+                    _rope[i] += (0, -1);
                 } else if (diff.Equals((-2, 0)))
                 {
-                    _rope[i] = curr + (-1, 0);
+                    _rope[i] += (-1, 0);
                 } else if (diff.Equals((0, 2)))
                 {
-                    _rope[i] = curr + (0, 1);
+                    _rope[i] += (0, 1);
                 } else if (diff.Equals((1, 2)) || diff.Equals((2, 1)) || diff.Equals((2, 2)))
                 {
-                    _rope[i] = curr + (1, 1);
+                    _rope[i] += (1, 1);
                 } else if (diff.Equals((1, -2)) || diff.Equals((2, -1)) || diff.Equals((2, -2)))
                 {
-                    _rope[i] = curr + (1, -1);
+                    _rope[i] += (1, -1);
                 } else if (diff.Equals((-1, -2)) || diff.Equals((-2, -1)) || diff.Equals((-2, -2)))
                 {
-                    _rope[i] = curr + (-1, -1);
+                    _rope[i] += (-1, -1);
                 } else if (diff.Equals((-1, 2)) || diff.Equals((-2, 1)) || diff.Equals((-2, 2)))
                 {
-                    _rope[i] = curr + (-1, 1);
+                    _rope[i] += (-1, 1);
                 }
 
                 if (i == _rope.Count - 1)
