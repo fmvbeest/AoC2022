@@ -11,65 +11,26 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
 
     public override int PartOne(IEnumerable<(char, int)> input)
     {
-        var head = new Coordinate(0, 0);
-        var tail = new Coordinate(0, 0);
-        var visited = new List<Coordinate> { tail };
+        var rope = new Rope(new Coordinate(0, 0),2);
 
-        Console.WriteLine($"{head} {tail}");
-        
         foreach (var (direction, count) in input)
         {
-            for (var i = 0; i < count; i++)
-            {
-                switch (direction)
-                {
-                    case 'R' : head = MoveRight(head);
-                        if (head.X - tail.X > 1)
-                        {
-                            tail = MoveLeft(head);
-                            visited.Add(tail);
-                        }
-                        break;
-                    case 'U' : head = MoveUp(head);
-                        if (head.Y - tail.Y > 1)
-                        {
-                            tail = MoveDown(head);
-                            visited.Add(tail);
-                        }
-                        break;
-                    case 'L' : head = MoveLeft(head);
-                        if (head.X - tail.X < -1)
-                        {
-                            tail = MoveRight(head);
-                            visited.Add(tail);
-                        }
-                        break;
-                    case 'D' : head = MoveDown(head);
-                        if (head.Y - tail.Y < -1)
-                        {
-                            tail = MoveUp(head);
-                            visited.Add(tail);
-                        }
-                        break;
-                }
-                Console.WriteLine($"{head} {tail}");
-            }
-            
-            
-        }
-
-        Console.WriteLine("-----");
-        foreach (var pos in visited)
-        {
-            Console.WriteLine(pos);
+            rope.MoveHead(direction, count);
         }
         
-        return visited.Distinct().Count();
+        return rope.GetVisited().Distinct().Count();
     }
 
     public override int PartTwo(IEnumerable<(char, int)> input)
     {
-        return 0;
+        var rope = new Rope(new Coordinate(0, 0), 10);
+
+        foreach (var (direction, count) in input)
+        {
+            rope.MoveHead(direction, count);
+        }
+        
+        return rope.GetVisited().Distinct().Count();
     }
     
     public override IEnumerable<(char, int)> Preprocess(IPuzzleInput input, int part = 1)
@@ -96,43 +57,93 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
     {
         return new Coordinate(pos.X, pos.Y-1);
     }
-    
-    private class Coordinate : IEquatable<Coordinate>
+
+    private class Rope
     {
-        private readonly (int, int) _pos;
-
-        public Coordinate(int x, int y)
-        {
-            _pos = (x, y);
-        }
+        private readonly List<Coordinate> _rope;
+        private readonly List<Coordinate> _visited;
         
-        public int X => _pos.Item1;
-
-        public int Y => _pos.Item2;
-
-        public bool Equals(Coordinate? other)
+        public Rope(Coordinate start, int length)
         {
-            if (other == null)
+            _visited = new List<Coordinate>();
+            _rope = new List<Coordinate>();
+            for (var i = 0; i < length; i++)
             {
-                return false;
+                _rope.Add(start);
             }
-
-            return X == other.X && Y == other.Y;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as Coordinate);
-        }
-
-        public override int GetHashCode()
-        {
-            return _pos.GetHashCode();
+            _visited.Add(start);
         }
 
         public override string ToString()
         {
-            return $"({X},{Y})";
+            return _rope.Aggregate(string.Empty, (current, knot) => current + knot);
+        }
+
+        public void MoveHead(char direction, int count)
+        {
+            for (var i = 0; i < count; i++)
+            {
+                _rope[0] = direction switch
+                {
+                    'R' => MoveRight(_rope[0]),
+                    'U' => MoveUp(_rope[0]),
+                    'L' => MoveLeft(_rope[0]),
+                    'D' => MoveDown(_rope[0]),
+                    _ => _rope[0]
+                };
+                PropagateStep(direction);
+            }
+        }
+
+        private void PropagateStep(char move)
+        {
+            for (var i = 1; i < _rope.Count; i++)
+            {
+                var prev = _rope[i-1];
+                var curr = _rope[i];
+                var diff = prev - curr;
+                
+                if (diff.IsAdjacentTo(new Coordinate(0,0)))
+                {
+                    break;
+                }
+                if (diff.Equals(new Coordinate(2, 0)))
+                {
+                    _rope[i] = curr + new Coordinate(1, 0);
+                } else 
+                if (diff.Equals(new Coordinate(0, -2)))
+                {
+                    _rope[i] = curr + new Coordinate(0, -1);
+                } else if (diff.Equals(new Coordinate(-2, 0)))
+                {
+                    _rope[i] = curr + new Coordinate(-1, 0);
+                } else if (diff.Equals(new Coordinate(0, 2)))
+                {
+                    _rope[i] = curr + new Coordinate(0, 1);
+                } else if (diff.Equals(new Coordinate(1, 2)) || diff.Equals(new Coordinate(2, 1)) || diff.Equals(new Coordinate(2, 2)))
+                {
+                    _rope[i] = curr + new Coordinate(1, 1);
+                } else if (diff.Equals(new Coordinate(1, -2)) || diff.Equals(new Coordinate(2, -1)) || diff.Equals(new Coordinate(2, -2)))
+                {
+                    _rope[i] = curr + new Coordinate(1, -1);
+                } else if (diff.Equals(new Coordinate(-1, -2)) || diff.Equals(new Coordinate(-2, -1)) || diff.Equals(new Coordinate(-2, -2)))
+                {
+                    _rope[i] = curr + new Coordinate(-1, -1);
+                } else if (diff.Equals(new Coordinate(-1, 2)) || diff.Equals(new Coordinate(-2, 1)) || diff.Equals(new Coordinate(-2, 2)))
+                {
+                    _rope[i] = curr + new Coordinate(-1, 1);
+                }
+
+                if (i == _rope.Count - 1)
+                {
+                    _visited.Add(_rope[i]);
+                }
+            }
+        }
+
+        public IEnumerable<Coordinate> GetVisited()
+        {
+            return _visited;
         }
     }
 }

@@ -22,12 +22,12 @@ public class TestPuzzle9
     [Fact]
     public void TestPartTwoSample()
     {
-        Assert.Equal(8, _puzzle.PartTwo(_puzzle.Preprocess(_testInput)));
+        Assert.Equal(1, _puzzle.PartTwo(_puzzle.Preprocess(_testInput)));
     }
     
     [Fact]
     public void TestPartTwoActual()
     {
-        Assert.Equal(345168, _puzzle.PartTwo(_puzzle.Preprocess(_puzzleInput)));
+        Assert.Equal(2331, _puzzle.PartTwo(_puzzle.Preprocess(_puzzleInput)));
     }
 }
