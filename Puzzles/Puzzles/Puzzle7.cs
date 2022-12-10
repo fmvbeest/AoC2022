@@ -1,5 +1,4 @@
-﻿using AoC2022.Util;
-using Directory = AoC2022.Util.Directory;
+﻿using Directory = AoC2022.Util.Directory;
 using File = AoC2022.Util.File;
 
 namespace AoC2022.Puzzles;

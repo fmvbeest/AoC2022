@@ -1,6 +1,4 @@
-﻿using AoC2022.Util;
-
-namespace AoC2022.Puzzles;
+﻿namespace AoC2022.Puzzles;
 
 public class Puzzle6 : PuzzleBase<int, string>
 {
