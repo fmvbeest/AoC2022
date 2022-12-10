@@ -91,7 +91,7 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
                     (1, -2) or (2, -1) or (2, -2) => (1, -1),
                     (-1, 2) or (-2, 1) or (-2, 2) => (-1, 1),
                     (-1, -2) or (-2, -1) or (-2, -2) => (-1, -1),
-                    _ => throw new ArgumentOutOfRangeException()
+                    _ => throw new ArgumentOutOfRangeException("diff", _rope[i-1] - _rope[i], null)
                 };
 
                 if (i == _rope.Count - 1)

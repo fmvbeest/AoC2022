@@ -34,7 +34,7 @@ public class Coordinate : IEquatable<Coordinate>
     public bool IsAdjacentTo(Coordinate x)
     {
         var diff = this - x;
-        if (diff.X == diff.Y && diff.X is 0 or 1)
+        if (Math.Abs(diff.X) == Math.Abs(diff.Y) && Math.Abs(diff.X) is 0 or 1)
         {
             return true;
         }
