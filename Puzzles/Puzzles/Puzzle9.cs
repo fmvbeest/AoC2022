@@ -39,6 +39,12 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
         private readonly List<Coordinate> _rope;
         private readonly List<Coordinate> _visited;
         
+        private Coordinate Head
+        {
+            get => _rope[0];
+            set => _rope[0] = value;
+        }
+        
         public Rope(Coordinate start, int length)
         {
             _visited = new List<Coordinate>();
@@ -54,13 +60,13 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
         {
             for (var i = 0; i < count; i++)
             {
-                _rope[0] = direction switch
+                Head += direction switch
                 {
-                    'R' => _rope[0] + (1, 0),
-                    'U' => _rope[0] + (0, 1),
-                    'L' => _rope[0] + (-1, 0),
-                    'D' => _rope[0] + (0, -1),
-                    _ => _rope[0]
+                    'R' => (1, 0),
+                    'U' => (0, 1),
+                    'L' => (-1, 0),
+                    'D' => (0, -1),
+                    _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
                 };
                 PropagateStep();
             }
@@ -75,17 +81,17 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
                     return;
                 }
                 
-                _rope[i] = (_rope[i-1] - _rope[i]) switch
+                _rope[i] += (_rope[i-1] - _rope[i]) switch
                 {
-                    (2, 0) => _rope[i] += (1, 0),
-                    (0, -2) => _rope[i] += (0, -1),
-                    (-2, 0) => _rope[i] += (-1, 0),
-                    (0, 2) => _rope[i] += (0, 1),
-                    (1, 2) or (2, 1) or (2, 2) => _rope[i] += (1, 1),
-                    (1, -2) or (2, -1) or (2, -2) => _rope[i] += (1, -1),
-                    (-1, 2) or (-2, 1) or (-2, 2) => _rope[i] += (-1, 1),
-                    (-1, -2) or (-2, -1) or (-2, -2) => _rope[i] += (-1, -1),
-                    _ => _rope[i]
+                    (2, 0) => (1, 0),
+                    (0, -2) => (0, -1),
+                    (-2, 0) => (-1, 0),
+                    (0, 2) => (0, 1),
+                    (1, 2) or (2, 1) or (2, 2) => (1, 1),
+                    (1, -2) or (2, -1) or (2, -2) => (1, -1),
+                    (-1, 2) or (-2, 1) or (-2, 2) => (-1, 1),
+                    (-1, -2) or (-2, -1) or (-2, -2) => (-1, -1),
+                    _ => throw new ArgumentOutOfRangeException()
                 };
 
                 if (i == _rope.Count - 1)
