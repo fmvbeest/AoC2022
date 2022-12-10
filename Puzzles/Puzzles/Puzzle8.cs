@@ -12,18 +12,16 @@ public class Puzzle8 : PuzzleBase<int, int[][]>
     public override int PartOne(int[][] grid)
     {
         var numVisible = 0;
-        
         for (var i = 1; i < grid.Length-1; i++)
         {
             for (var j = 1; j < grid[i].Length-1; j++)
             {
-                if (isVisible(i, j, grid))
+                if (IsVisible(i, j, grid))
                 {
                     numVisible++;
                 }
             }
         }
-
         return numVisible + 2 * grid.Length + 2 * (grid[0].Length - 2);
     }
 
@@ -37,106 +35,88 @@ public class Puzzle8 : PuzzleBase<int, int[][]>
                 scenicScore = Math.Max(scenicScore, ScenicScore(i, j, grid));
             }
         }
-
         return scenicScore;
     }
     
     public override int[][] Preprocess(IPuzzleInput input, int part = 1)
     {
-        var lines = input.GetInput().ToArray();
-
-        return lines.Select(line => line.Select(c => int.Parse(c.ToString())).ToArray()).ToArray();
+        return input.GetInput().Select(line => line.Select(c => c-'0').ToArray()).ToArray();
     }
 
-    private bool isVisible(int row, int column, int[][] grid)
+    private static bool IsVisible(int row, int column, IReadOnlyList<int[]> grid)
     {
         var tree = grid[row][column];
 
-        var left = GetLeft(row, column, grid).All(t => t < tree);
-        
-        var right = GetRight(row, column, grid).All(t => t < tree);
-        
-        var top = GetTop(row, column, grid).All(t => t < tree);
-        
-        var bottom = GetBottom(row, column, grid).All(t => t < tree);
-
-
-        return left || right || top || bottom;
+        return GetLeft(row, column, grid).All(t => t < tree) 
+               || GetRight(row, column, grid).All(t => t < tree)
+               || GetTop(row, column, grid).All(t => t < tree)
+               || GetBottom(row, column, grid).All(t => t < tree);
     }
 
-    private int[] GetLeft(int row, int column, int[][] grid)
+    private static IEnumerable<int> GetHorizontal(int start, int end, int row, IReadOnlyList<int[]> grid)
     {
         var res = new List<int>();
-        for (var i = 0; i < column; i++)
+        for (var i = start; i < end; i++)
         {
             res.Add(grid[row][i]);
         }
-        return res.ToArray();
-    }
-    
-    private int[] GetRight(int row, int column, int[][] grid)
-    {
-        var res = new List<int>();
-        for (var i = column+1; i < grid[row].Length; i++)
-        {
-            res.Add(grid[row][i]);
-        }
-        return res.ToArray();
+        return res;
     }
 
-    private int[] GetTop(int row, int column, int[][] grid)
+    private static IEnumerable<int> GetLeft(int row, int column, IReadOnlyList<int[]> grid)
+    {
+        return GetHorizontal(0, column, row, grid);
+    }
+    
+    private static IEnumerable<int> GetRight(int row, int column, IReadOnlyList<int[]> grid)
+    {
+        return GetHorizontal(column + 1, grid[row].Length, row, grid);
+    }
+
+    private static IEnumerable<int> GetVertical(int start, int end, int column, IReadOnlyList<int[]> grid)
     {
         var res = new List<int>();
-        for (var i = 0; i < row; i++)
+        for (var i = start; i < end; i++)
         {
             res.Add(grid[i][column]);
         }
-
-        return res.ToArray();
+        return res;
     }
     
-    private int[] GetBottom(int row, int column, int[][] grid)
+    private static IEnumerable<int> GetTop(int row, int column, IReadOnlyList<int[]> grid)
     {
-        var res = new List<int>();
-        for (var i = row+1; i< grid.Length; i++)
-        {
-            res.Add(grid[i][column]);
-        }
-        return res.ToArray();
+        return GetVertical(0, row, column, grid);
+    }
+    
+    private static IEnumerable<int> GetBottom(int row, int column, IReadOnlyList<int[]> grid)
+    {
+        return GetVertical(row+1, grid.Count, column, grid);
     }
 
-    private int ScenicScore(int row, int column, int[][] grid)
+    private static int ScenicScore(int row, int column, int[][] grid)
     {
         var score = 1;
         
-        var left = GetLeft(row, column, grid).Reverse().ToArray();
-        score *= ViewingDistance(left, grid[row][column]);
+        if ((score *= ViewingDistance(GetLeft(row, column, grid).Reverse(), grid[row][column])) == 0)
+            return score;
         
-        var right = GetRight(row, column, grid).ToArray();
-        score *= ViewingDistance(right, grid[row][column]);
+        if ((score *= ViewingDistance(GetRight(row, column, grid), grid[row][column])) == 0)
+            return score;
         
-        var top = GetTop(row, column, grid).Reverse().ToArray();
-        score *= ViewingDistance(top, grid[row][column]);
-        
-        var bottom = GetBottom(row, column, grid).ToArray();
-        score *= ViewingDistance(bottom, grid[row][column]);
+        if ((score *= ViewingDistance(GetTop(row, column, grid).Reverse(), grid[row][column])) == 0)
+            return score;
 
-        return score;
+        return score * ViewingDistance(GetBottom(row, column, grid), grid[row][column]);
     }
 
-    private int ViewingDistance(int[] treeline, int height)
+    private static int ViewingDistance(IEnumerable<int> treeline, int height)
     {
         var distance = 0;
-        
-        for (int i = 0; i < treeline.Length; i++)
+        foreach (var t in treeline)
         {
             distance++;
-            if (treeline[i] >= height)
-            {
-                break;
-            }
+            if (t >= height) break;
         }
-
         return distance;
     }
 }
