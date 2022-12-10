@@ -75,33 +75,18 @@ public class Puzzle9 : PuzzleBase<int, IEnumerable<(char, int)>>
                     return;
                 }
                 
-                var diff = _rope[i-1] - _rope[i];
-                if (diff.Equals((2,0)))
+                _rope[i] = (_rope[i-1] - _rope[i]) switch
                 {
-                    _rope[i] += (1,0);
-                } else 
-                if (diff.Equals((0, -2)))
-                {
-                    _rope[i] += (0, -1);
-                } else if (diff.Equals((-2, 0)))
-                {
-                    _rope[i] += (-1, 0);
-                } else if (diff.Equals((0, 2)))
-                {
-                    _rope[i] += (0, 1);
-                } else if (diff.Equals((1, 2)) || diff.Equals((2, 1)) || diff.Equals((2, 2)))
-                {
-                    _rope[i] += (1, 1);
-                } else if (diff.Equals((1, -2)) || diff.Equals((2, -1)) || diff.Equals((2, -2)))
-                {
-                    _rope[i] += (1, -1);
-                } else if (diff.Equals((-1, -2)) || diff.Equals((-2, -1)) || diff.Equals((-2, -2)))
-                {
-                    _rope[i] += (-1, -1);
-                } else if (diff.Equals((-1, 2)) || diff.Equals((-2, 1)) || diff.Equals((-2, 2)))
-                {
-                    _rope[i] += (-1, 1);
-                }
+                    (2, 0) => _rope[i] += (1, 0),
+                    (0, -2) => _rope[i] += (0, -1),
+                    (-2, 0) => _rope[i] += (-1, 0),
+                    (0, 2) => _rope[i] += (0, 1),
+                    (1, 2) or (2, 1) or (2, 2) => _rope[i] += (1, 1),
+                    (1, -2) or (2, -1) or (2, -2) => _rope[i] += (1, -1),
+                    (-1, 2) or (-2, 1) or (-2, 2) => _rope[i] += (-1, 1),
+                    (-1, -2) or (-2, -1) or (-2, -2) => _rope[i] += (-1, -1),
+                    _ => _rope[i]
+                };
 
                 if (i == _rope.Count - 1)
                 {

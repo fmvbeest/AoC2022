@@ -46,4 +46,10 @@ public class Coordinate : IEquatable<Coordinate>
     {
         return new Coordinate(tuple.x, tuple.y);
     }
+
+    public void Deconstruct(out int x, out int y)
+    {
+        x = X;
+        y = Y;
+    }
 }
