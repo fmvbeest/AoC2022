@@ -76,12 +76,13 @@ public class Puzzle9 : PuzzleBase<IEnumerable<(char, int)>, int, int>
         {
             for (var i = 1; i < _rope.Count; i++)
             {
-                if (_rope[i-1].IsAdjacentTo(_rope[i]))
+                var diff = _rope[i - 1] - _rope[i]; 
+                if (diff.Equals((0,0)) || _rope[i-1].IsAdjacentTo(_rope[i]))
                 {
                     return;
                 }
                 
-                _rope[i] += (_rope[i-1] - _rope[i]) switch
+                _rope[i] += (diff) switch
                 {
                     (2, 0) => (1, 0),
                     (0, -2) => (0, -1),
@@ -91,7 +92,7 @@ public class Puzzle9 : PuzzleBase<IEnumerable<(char, int)>, int, int>
                     (1, -2) or (2, -1) or (2, -2) => (1, -1),
                     (-1, 2) or (-2, 1) or (-2, 2) => (-1, 1),
                     (-1, -2) or (-2, -1) or (-2, -2) => (-1, -1),
-                    _ => throw new ArgumentOutOfRangeException("diff", _rope[i-1] - _rope[i], null)
+                    _ => throw new ArgumentOutOfRangeException("diff", diff, null)
                 };
 
                 if (i == _rope.Count - 1)

@@ -33,15 +33,21 @@ public class Coordinate : IEquatable<Coordinate>
 
     public bool IsAdjacentTo(Coordinate x)
     {
-        var diff = this - x;
-        if (Math.Abs(diff.X) == Math.Abs(diff.Y) && Math.Abs(diff.X) is 0 or 1)
-        {
-            return true;
-        }
-
-        return diff is { X: 0, Y: 1 } or { X: 1, Y: 0 } or { X: 0, Y: -1 } or { X: -1, Y: 0 };
+        return Neighbours().Contains(x);
     }
 
+    public IEnumerable<Coordinate> Neighbours(bool diagonal = true)
+    {
+        var neighbours = new List<Coordinate> { (X-1,Y), (X+1,Y), (X,Y-1), (X,Y+1) };
+
+        if (diagonal)
+        {
+            neighbours.AddRange(new List<Coordinate> { (X-1,Y-1), (X-1,Y+1), (X+1,Y+1), (X+1,Y-1) });
+        }
+
+        return neighbours;
+    } 
+    
     public static implicit operator Coordinate((int x, int y) tuple)
     {
         return new Coordinate(tuple.x, tuple.y);
