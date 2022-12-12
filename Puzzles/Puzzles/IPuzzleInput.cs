@@ -2,7 +2,9 @@
 
 public interface IPuzzleInput
 {
-    public IEnumerable<string> GetInput();
+    public IEnumerable<string> GetAllLines();
 
     public string GetFirstLine();
+
+    public string GetText();
 }

@@ -36,7 +36,7 @@ public class Puzzle8 : PuzzleBase<int[][], int, int>
     
     public override int[][] Preprocess(IPuzzleInput input, int part = 1)
     {
-        return input.GetInput().Select(line => line.Select(c => c-'0').ToArray()).ToArray();
+        return input.GetAllLines().Select(line => line.Select(c => c-'0').ToArray()).ToArray();
     }
 
     private static bool IsVisible(int row, int column, IReadOnlyList<int[]> grid)

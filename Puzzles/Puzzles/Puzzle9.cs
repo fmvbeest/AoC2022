@@ -19,7 +19,7 @@ public class Puzzle9 : PuzzleBase<IEnumerable<(char, int)>, int, int>
     
     public override IEnumerable<(char, int)> Preprocess(IPuzzleInput input, int part = 1)
     {
-        return input.GetInput().Select(line => line.Split(' ')).Select(s => (s[0][0], int.Parse(s[1]))).ToList();
+        return input.GetAllLines().Select(line => line.Split(' ')).Select(s => (s[0][0], int.Parse(s[1]))).ToList();
     }
 
     private static int SimulateRope(int length, IEnumerable<(char, int)> input)

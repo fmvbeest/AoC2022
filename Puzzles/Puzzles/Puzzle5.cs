@@ -37,7 +37,7 @@ public class Puzzle5 : PuzzleBase<(Stack<char>[], Stack<Instruction>), string, s
     
     public override (Stack<char>[], Stack<Instruction>) Preprocess(IPuzzleInput input, int part = 1)
     {
-        var lines = input.GetInput().Reverse().ToList();
+        var lines = input.GetAllLines().Reverse().ToList();
         var instructions = new Stack<Instruction>();
         
         int i;

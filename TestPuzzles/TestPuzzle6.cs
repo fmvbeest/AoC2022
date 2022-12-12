@@ -10,11 +10,11 @@ public class TestPuzzle6
     [Fact]
     public void TestPartOneSample()
     {
-        Assert.Equal(7, _puzzle.PartOne(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetInput().ToArray()[0]}))));
-        Assert.Equal(5, _puzzle.PartOne(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetInput().ToArray()[1]}))));
-        Assert.Equal(6, _puzzle.PartOne(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetInput().ToArray()[2]}))));
-        Assert.Equal(10, _puzzle.PartOne(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetInput().ToArray()[3]}))));
-        Assert.Equal(11, _puzzle.PartOne(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetInput().ToArray()[4]}))));
+        Assert.Equal(7, _puzzle.PartOne(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetAllLines().ToArray()[0]}))));
+        Assert.Equal(5, _puzzle.PartOne(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetAllLines().ToArray()[1]}))));
+        Assert.Equal(6, _puzzle.PartOne(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetAllLines().ToArray()[2]}))));
+        Assert.Equal(10, _puzzle.PartOne(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetAllLines().ToArray()[3]}))));
+        Assert.Equal(11, _puzzle.PartOne(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetAllLines().ToArray()[4]}))));
     }
     
     [Fact]
@@ -26,11 +26,11 @@ public class TestPuzzle6
     [Fact]
     public void TestPartTwoSample()
     {
-        Assert.Equal(19, _puzzle.PartTwo(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetInput().ToArray()[0]}))));
-        Assert.Equal(23, _puzzle.PartTwo(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetInput().ToArray()[1]}))));
-        Assert.Equal(23, _puzzle.PartTwo(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetInput().ToArray()[2]}))));
-        Assert.Equal(29, _puzzle.PartTwo(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetInput().ToArray()[3]}))));
-        Assert.Equal(26, _puzzle.PartTwo(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetInput().ToArray()[4]}))));
+        Assert.Equal(19, _puzzle.PartTwo(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetAllLines().ToArray()[0]}))));
+        Assert.Equal(23, _puzzle.PartTwo(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetAllLines().ToArray()[1]}))));
+        Assert.Equal(23, _puzzle.PartTwo(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetAllLines().ToArray()[2]}))));
+        Assert.Equal(29, _puzzle.PartTwo(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetAllLines().ToArray()[3]}))));
+        Assert.Equal(26, _puzzle.PartTwo(_puzzle.Preprocess(new PuzzleInput(new []{_testInput.GetAllLines().ToArray()[4]}))));
     }
     
     [Fact]

@@ -17,7 +17,7 @@ public class Puzzle4 : PuzzleBase<IEnumerable<(Range a, Range b)>, int, int>
 
     public override IEnumerable<(Range a, Range b)> Preprocess(IPuzzleInput input, int part = 1)
     {
-        return (from line in input.GetInput() 
+        return (from line in input.GetAllLines() 
             select line.Split(',') into sections 
             let rangex = sections[0].Split('-') 
             let rangey = sections[1].Split('-') 

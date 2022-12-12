@@ -25,12 +25,12 @@ public class Puzzle3 : PuzzleBase<IEnumerable<string[]>, int, int>
 
     private static IEnumerable<string[]> PreprocessPartOne(IPuzzleInput input)
     {
-        return input.GetInput().Select(s => new[] { s[..(s.Length / 2)], s[(s.Length / 2)..] }).ToArray();
+        return input.GetAllLines().Select(s => new[] { s[..(s.Length / 2)], s[(s.Length / 2)..] }).ToArray();
     }
     
     private static IEnumerable<string[]> PreprocessPartTwo(IPuzzleInput input)
     {
-        return input.GetInput().Chunk(3);
+        return input.GetAllLines().Chunk(3);
     }
 
     private static int GetPriority(char c)

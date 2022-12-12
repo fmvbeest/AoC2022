@@ -10,38 +10,27 @@ public class Puzzle10 : PuzzleBase<string[], int, string>
 
     public override int PartOne(string[] input)
     {
-        var signalStrength = 0;
-        var cycle = 0;
-        var cpu = new CPU() { Register = 1 };
+        var cpu = new CPU();
 
         foreach (var line in input)
         {
-            cycle++;
-            if (cycle % 40 == 20)
-            {
-                signalStrength += (cpu.Register * cycle);
-            }
-            
             var s = line.Split(' ');
             if (s[0] == "noop")
             {
-                continue;
+                cpu.Execute(CPU.Instruction.NOOP);
             }
-
-            cycle++;
-            if (cycle % 40 == 20)
+            else
             {
-                signalStrength += (cpu.Register * cycle);
+                cpu.Execute(CPU.Instruction.ADDX, int.Parse(s[1]));
             }
-            cpu.Addx(int.Parse(s[1]));
-
-            if (cycle >= 220)
+            
+            if (cpu.GetTicks() >= 220)
             {
                 break;
             }
         }
 
-        return signalStrength;
+        return cpu.SignalStrength();
     }
 
     public override string PartTwo(string[] input)
@@ -78,17 +67,76 @@ public class Puzzle10 : PuzzleBase<string[], int, string>
     
     public override string[] Preprocess(IPuzzleInput input, int part = 1)
     {
-        return input.GetInput().ToArray();
+        return input.GetAllLines().ToArray();
     }    
     
     private class CPU
     {
         public int Register { get; set; }
+        private int _circuitClock;
+        private int _signalStrength;
+
+        public CPU()
+        {
+            _circuitClock = 0;
+            _signalStrength = 0;
+            Register = 1;
+        }
+
+
+        public void Execute(Instruction instruction, int parameter = 0)
+        {
+            switch (instruction)
+            {
+                case Instruction.NOOP: Noop();
+                    break;
+                case Instruction.ADDX: Addx(parameter);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(instruction), instruction, null);
+            }
+        }
+
+        private void Noop()
+        {
+            AddTick();
+        }
         
         public void Addx(int x)
         {
+            AddTick();
+            AddTick();
             Register += x;
         }
+
+        private void AddTick(int part = 1)
+        {
+            _circuitClock++;
+            if (part == 1)
+            {
+                if (_circuitClock % 40 == 20)
+                {
+                    _signalStrength += Register * _circuitClock;
+                }
+            }
+            
+        }
+        
+        public enum Instruction
+        {
+            NOOP, ADDX
+        }
+
+        public int SignalStrength()
+        {
+            return _signalStrength;
+        }
+
+        public int GetTicks()
+        {
+            return _circuitClock;
+        }
+
     }
 
     private class CRT

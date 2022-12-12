@@ -21,7 +21,7 @@ public class Puzzle7 : PuzzleBase<Directory, long, long>
     
     public override Directory Preprocess(IPuzzleInput input, int part = 1)
     {
-        var lines = input.GetInput().ToArray();
+        var lines = input.GetAllLines().ToArray();
 
         var root = new Directory("/", null);
         var current = root;

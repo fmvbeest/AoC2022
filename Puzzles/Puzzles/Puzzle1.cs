@@ -18,7 +18,7 @@ public class Puzzle1 : PuzzleBase<IEnumerable<IEnumerable<int>>, int, int>
     public override IEnumerable<IEnumerable<int>> Preprocess(IPuzzleInput input, int part = 1)
     {
         var index = 0;
-        return input.GetInput().
+        return input.GetAllLines().
             GroupBy(x => !string.IsNullOrEmpty(x) ? index : index++, 
                 x => !string.IsNullOrEmpty(x) ? int.Parse(x) : 0);
     }

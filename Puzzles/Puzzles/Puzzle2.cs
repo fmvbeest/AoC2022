@@ -19,7 +19,7 @@ public class Puzzle2 : PuzzleBase<IEnumerable<Game>, int, int>
 
     public override IEnumerable<Game> Preprocess(IPuzzleInput input, int part = 1)
     {
-        return input.GetInput().Select(line => new Game()
+        return input.GetAllLines().Select(line => new Game()
         {
             TheirMove = ParseMove(line[0]), 
             OurMove = ParseMove(line[2]), 
