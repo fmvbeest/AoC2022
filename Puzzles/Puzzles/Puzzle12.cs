@@ -10,15 +10,13 @@ public class Puzzle12 : PuzzleBase<(int[][] grid, List<Coordinate> startPosition
 
     public override int PartOne((int[][], List<Coordinate>, Coordinate) input)
     {
-        var (steps, reachedTop) = Climb(input);
-        Console.WriteLine($"Reached top: {reachedTop}");
+        var (steps, _) = Climb(input);
         return steps;
     }
 
     public override int PartTwo((int[][] grid, List<Coordinate> startPositions, Coordinate top) input)
     {
-        var (steps, reachedTop) = Climb(input);
-        Console.WriteLine($"Reached top: {reachedTop}");
+        var (steps, _) = Climb(input);
         return steps;
     }
     
