@@ -20,26 +20,19 @@ public class Puzzle13 : PuzzleBase<IEnumerable<(List<object> left, List<object> 
     
     public override IEnumerable<(List<object> left, List<object> right)> Preprocess(IPuzzleInput input, int part = 1)
     {
-        var res = new List<(List<object> left, List<object> right)>();
         var x = input.GetText().Split(Environment.NewLine+Environment.NewLine);
 
-        foreach (var set in x)
-        {
-            var pair = set.Split(Environment.NewLine);
-            res.Add((parsePacket(pair[0]), parsePacket(pair[1])));
-        }
-
-        return res;
+        return x.Select(set => set.Split(Environment.NewLine))
+            .Select(pair => (ParsePacket(pair[0]), ParsePacket(pair[1]))).ToList();
     }
 
-    public List<object> parsePacket(string s)
+    private List<object> ParsePacket(string s)
     {
-         
         var stack = new Stack<List<object>>();
         stack.Push(new List<object>());
         const char sep = '#';
         var numberOrSeparator = s.Replace('[', sep).Replace(']', sep).Replace(',', sep);
-        for (int i = 1; i < s.Length-1; i++)
+        for (var i = 1; i < s.Length - 1; i++)
         {
             switch (s[i])
             {
