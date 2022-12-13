@@ -10,7 +10,18 @@ public class Puzzle13 : PuzzleBase<IEnumerable<(List<object> left, List<object> 
 
     public override int PartOne(IEnumerable<(List<object> left, List<object> right)> input)
     {
-        return 0;
+        var pairs = input.ToList();
+        
+        var sum = 0;
+        for (var i = 0; i < pairs.Count; i++)
+        {
+            if (Compare(pairs[i].left, pairs[i].right) < 0)
+            {
+                sum += i + 1;
+            }
+        }
+
+        return sum;
     }
 
     public override int PartTwo(IEnumerable<(List<object> left, List<object> right)> input)
@@ -25,6 +36,47 @@ public class Puzzle13 : PuzzleBase<IEnumerable<(List<object> left, List<object> 
         return x.Select(set => set.Split(Environment.NewLine))
             .Select(pair => (ParsePacket(pair[0]), ParsePacket(pair[1]))).ToList();
     }
+
+    private int Compare(object left, object right)
+    {
+        if (left is int x && right is int y)
+        {
+            return x.CompareTo(y);
+        }
+
+        using var leftList = GetList(left).GetEnumerator();
+        using var rightList = GetList(right).GetEnumerator();
+
+        while (true)
+        {
+            var leftHasItem = leftList.MoveNext();
+            var rightHasItem = rightList.MoveNext();
+
+            switch (leftHasItem)
+            {
+                case false when !rightHasItem:
+                    return 0;
+                case false when rightHasItem:
+                    return -1;
+                case true when !rightHasItem:
+                    return 1;
+            }
+
+            var compare = Compare(leftList.Current, rightList.Current);
+            if (compare != 0)
+            {
+                return compare;
+            }
+        }
+    }
+
+    private List<object> GetList(object o)
+    {
+        return o as List<object> ?? new List<object> { o };
+    }
+
+
+
 
     private List<object> ParsePacket(string s)
     {
