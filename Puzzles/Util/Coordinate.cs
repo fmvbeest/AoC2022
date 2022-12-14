@@ -58,4 +58,48 @@ public class Coordinate : IEquatable<Coordinate>
         x = X;
         y = Y;
     }
+
+    public IEnumerable<Coordinate> Range(Coordinate end)
+    {
+        var list = new List<Coordinate> { this };
+
+        var diff = end - this;
+
+        var n = 0;
+        var e = 0;
+            
+        if (diff.X != 0)
+        {
+            n = Math.Abs(diff.X);
+            e = diff.X / n;
+
+            return HorizontalRange(this, e, n, list);
+        }
+        
+        n = Math.Abs(diff.Y);
+        e = diff.Y / n;
+        
+        return VerticalRange(this, e, n, list);
+    }
+    
+    public IEnumerable<Coordinate> HorizontalRange(Coordinate start, int diff, int n, List<Coordinate> list)
+    {
+        for (int i = 1; i <= n; i++)
+        {
+            list.Add(new Coordinate(start.X + (diff*i), start.Y));   
+        }
+
+        return list;
+    }
+    
+    public IEnumerable<Coordinate> VerticalRange(Coordinate start, int diff, int n, List<Coordinate> list)
+    {
+        for (int i = 1; i <= n; i++)
+        {
+            list.Add(new Coordinate(start.X, start.Y+ (diff*i)));   
+        }
+
+        return list;
+    }
+    
 }
