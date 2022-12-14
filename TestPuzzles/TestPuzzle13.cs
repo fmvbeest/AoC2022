@@ -10,24 +10,24 @@ public class TestPuzzle13
     [Fact]
     public void TestPartOneSample()
     {
-        Assert.Equal(0, _puzzle.PartOne(_puzzle.Preprocess(_testInput)));
+        Assert.Equal(13, _puzzle.PartOne(_puzzle.Preprocess(_testInput)));
     }
     
     [Fact]
     public void TestPartOneActual()
     {
-        Assert.Equal(0, _puzzle.PartOne(_puzzle.Preprocess(_puzzleInput)));
+        Assert.Equal(6272, _puzzle.PartOne(_puzzle.Preprocess(_puzzleInput)));
     }
     
     [Fact]
     public void TestPartTwoSample()
     {
-        Assert.Equal(0, _puzzle.PartTwo(_puzzle.Preprocess(_testInput, 2)));
+        Assert.Equal(140, _puzzle.PartTwo(_puzzle.Preprocess(_testInput, 2)));
     }
     
     [Fact]
     public void TestPartTwoActual()
     {
-        Assert.Equal(0, _puzzle.PartTwo(_puzzle.Preprocess(_puzzleInput, 2)));
+        Assert.Equal(22288, _puzzle.PartTwo(_puzzle.Preprocess(_puzzleInput, 2)));
     }
 }

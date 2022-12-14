@@ -26,7 +26,24 @@ public class Puzzle13 : PuzzleBase<IEnumerable<(List<object> left, List<object> 
 
     public override int PartTwo(IEnumerable<(List<object> left, List<object> right)> input)
     {
-        return 0;
+        var pairs = input.ToList();
+        var two = ParsePacket("[[2]]");
+        var six = ParsePacket("[[6]]");
+        pairs.Add((two, six));
+        
+        var list = new List<object>();
+        foreach (var pair in pairs)
+        {
+            list.Add(pair.left);
+            list.Add(pair.right);
+        }
+        
+        list.Sort( (a, b) => Compare(a, b));
+
+        var indexTwo = list.IndexOf(two);
+        var indexSix = list.IndexOf(six);
+
+        return (list.IndexOf(two) + 1) * (list.IndexOf(six) + 1);
     }
     
     public override IEnumerable<(List<object> left, List<object> right)> Preprocess(IPuzzleInput input, int part = 1)
@@ -37,7 +54,23 @@ public class Puzzle13 : PuzzleBase<IEnumerable<(List<object> left, List<object> 
             .Select(pair => (ParsePacket(pair[0]), ParsePacket(pair[1]))).ToList();
     }
 
-    private int Compare(object left, object right)
+    // private class PacketList : IComparable
+    // {
+    //     private List<object> list;
+    //     
+    //     public int CompareTo(object? obj)
+    //     {
+    //         if (obj == null)
+    //         {
+    //             return -1;
+    //         }
+    //         PacketList other = obj as PacketList;
+    //         
+    //         return 
+    //     }
+    // }
+
+    public int Compare(object left, object right)
     {
         if (left is int x && right is int y)
         {
