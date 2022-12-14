@@ -38,10 +38,7 @@ public class Puzzle13 : PuzzleBase<IEnumerable<(List<object> left, List<object> 
             list.Add(pair.right);
         }
         
-        list.Sort( (a, b) => Compare(a, b));
-
-        var indexTwo = list.IndexOf(two);
-        var indexSix = list.IndexOf(six);
+        list.Sort(Compare);
 
         return (list.IndexOf(two) + 1) * (list.IndexOf(six) + 1);
     }
@@ -54,23 +51,7 @@ public class Puzzle13 : PuzzleBase<IEnumerable<(List<object> left, List<object> 
             .Select(pair => (ParsePacket(pair[0]), ParsePacket(pair[1]))).ToList();
     }
 
-    // private class PacketList : IComparable
-    // {
-    //     private List<object> list;
-    //     
-    //     public int CompareTo(object? obj)
-    //     {
-    //         if (obj == null)
-    //         {
-    //             return -1;
-    //         }
-    //         PacketList other = obj as PacketList;
-    //         
-    //         return 
-    //     }
-    // }
-
-    public int Compare(object left, object right)
+    private int Compare(object left, object right)
     {
         if (left is int x && right is int y)
         {
@@ -107,9 +88,6 @@ public class Puzzle13 : PuzzleBase<IEnumerable<(List<object> left, List<object> 
     {
         return o as List<object> ?? new List<object> { o };
     }
-
-
-
 
     private List<object> ParsePacket(string s)
     {
