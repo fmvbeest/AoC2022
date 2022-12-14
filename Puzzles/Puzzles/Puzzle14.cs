@@ -17,9 +17,7 @@ public class Puzzle14 : PuzzleBase<List<List<Coordinate>>, int, int>
         var bottom = rocks.Select(x => x.Y).Max();
         
         var sand = new HashSet<Coordinate>();
-        
-        
-        
+
         var isBlocked = false;
         var intoTheAbyss = false;
        
@@ -56,15 +54,58 @@ public class Puzzle14 : PuzzleBase<List<List<Coordinate>>, int, int>
                 isBlocked = true;
             }
         }
-        
-        
-        
+
         return sand.Count;
     }
 
     public override int PartTwo(List<List<Coordinate>> input)
     {
-        return 0;
+        var sandSource = new Coordinate(500, 0);
+
+        var rocks = InitializeRocks(input);
+
+        var bottom = rocks.Select(x => x.Y).Max() + 2;
+        
+        var sand = new HashSet<Coordinate>();
+        
+        var isBlocked = false;
+        var sourceBlocked = false;
+       
+        while (!sourceBlocked)
+        {
+            var sandUnit = sandSource;
+            isBlocked = false;
+            while (!isBlocked)
+            {
+                if (!IsBlocked(sandUnit + (0, 1), rocks, sand) && sandUnit.Y != bottom-1)
+                {
+                    sandUnit += (0, 1);
+                    continue;
+                }
+                if (!IsBlocked(sandUnit + (-1, 1), rocks, sand) && sandUnit.Y != bottom-1)
+                {
+                    sandUnit += (-1, 1);
+                    continue;
+                }
+                if (!IsBlocked(sandUnit + (1, 1), rocks, sand) && sandUnit.Y != bottom-1)
+                {
+                    sandUnit += (1, 1);
+                    continue;
+                }
+
+                sand.Add(sandUnit);
+                if (sandUnit.Equals(sandSource))
+                {
+                    sourceBlocked = true;
+                    break;
+                }
+              
+
+                isBlocked = true;
+            }
+        }
+
+        return sand.Count;
     }
     
     public override List<List<Coordinate>> Preprocess(IPuzzleInput input, int part = 1)
