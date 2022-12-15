@@ -8,6 +8,11 @@ public class Coordinate : IEquatable<Coordinate>
     {
         _pos = (x, y);
     }
+    
+    public Coordinate(Coordinate pos)
+    {
+        _pos = (pos.X, pos.Y);
+    }
         
     public int X => _pos.x;
 
@@ -100,6 +105,12 @@ public class Coordinate : IEquatable<Coordinate>
         }
 
         return list;
+    }
+
+    public int ManhattanDistance(Coordinate x)
+    {
+        var diff = this - x;
+        return Math.Abs(diff.X) + Math.Abs(diff.Y);
     }
     
 }
