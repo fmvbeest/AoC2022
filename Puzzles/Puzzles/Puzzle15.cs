@@ -4,77 +4,54 @@ using AoC2022.Util;
 
 namespace AoC2022.Puzzles;
 
-public class Puzzle15 : PuzzleBase<IEnumerable<string>, int, int>
+public class Puzzle15 : PuzzleBase<(IEnumerable<Sensor> sensors, HashSet<string> beacons), int, int>
 {
     protected override string Filename => "Input/puzzle-input-15";
     protected override string PuzzleTitle => "--- Day 15: Beacon Exclusion Zone ---";
 
-    public override int PartOne(IEnumerable<string> input)
+    public override int PartOne((IEnumerable<Sensor> sensors, HashSet<string> beacons) input)
     {
-        var lines = input.ToList();
+        var (sensors, knownBeacons) = input;
 
-        var sensors = new List<Sensor>();
-        var knownBeacons = new HashSet<Coordinate>();
-        
-        foreach (var line in lines)
-        {
-            var s = line.Split(':');
-            var sensorinfo = s[0].Split("at ")[^1];
-            var beaconinfo = s[1].Split("at ")[^1];
-            var sensorx = int.Parse(sensorinfo.Split(',')[0].Split('=')[^1]);
-            var sensory = int.Parse(sensorinfo.Split(',')[1].Split('=')[^1]);
-            var beaconx = int.Parse(beaconinfo.Split(',')[0].Split('=')[^1]);
-            var beacony = int.Parse(beaconinfo.Split(',')[1].Split('=')[^1]);
-
-            var beacon = new Coordinate(beaconx, beacony);
-            knownBeacons.Add(beacon);
-            var sensor = new Sensor(new Coordinate(sensorx, sensory), beacon);
-            sensors.Add(sensor);
-        }
-
-        var blockers = new HashSet<Coordinate>();
-
+        var y = 2000000;
+        var ranges = new List<(int a, int b)>();
         foreach (var sensor in sensors)
         {
-            var blocks = sensor.GetInRange(2000000)
-                .Where(c => c.ManhattanDistance(sensor) <= sensor.Range());
-
-            foreach (var block in blocks)
+            if (sensor.HorizontalBlockRange(y, out var range))
             {
-                if (!knownBeacons.Contains(block))
-                {
-                    blockers.Add(block);
-                }
+                ranges.Add(range);
             }
         }
 
-        return blockers.Count;
+        ranges = ranges.OrderBy(x => x.a).ThenBy(x => x.b).ToList();
+
+        var currentRange = ranges.First();
+
+        var newRanges = new List<(int a, int b)>();
+
+        foreach (var range in ranges.Skip(1))
+        {
+            if (Overlap(currentRange, range))
+            {
+                var newRange = Merge(currentRange, range);
+                currentRange = newRange;
+            }
+            else
+            {
+                newRanges.Add(currentRange);
+                currentRange = range;
+            }
+                 
+        }
+        newRanges.Add(currentRange);
+        return newRanges.Sum(x => x.b - x.a);
     }
 
-    public override int PartTwo(IEnumerable<string> input)
+    public override int PartTwo((IEnumerable<Sensor> sensors, HashSet<string> beacons) input)
     {
-        var lines = input.ToList();
+        var (sensors, knownBeacons) = input;
 
-        var sensors = new List<Sensor>();
-        var knownBeacons = new HashSet<Coordinate>();
-        
-        foreach (var line in lines)
-        {
-            var s = line.Split(':');
-            var sensorinfo = s[0].Split("at ")[^1];
-            var beaconinfo = s[1].Split("at ")[^1];
-            var sensorx = int.Parse(sensorinfo.Split(',')[0].Split('=')[^1]);
-            var sensory = int.Parse(sensorinfo.Split(',')[1].Split('=')[^1]);
-            var beaconx = int.Parse(beaconinfo.Split(',')[0].Split('=')[^1]);
-            var beacony = int.Parse(beaconinfo.Split(',')[1].Split('=')[^1]);
-
-            var beacon = new Coordinate(beaconx, beacony);
-            knownBeacons.Add(beacon);
-            var sensor = new Sensor(new Coordinate(sensorx, sensory), beacon);
-            sensors.Add(sensor);
-        }
-
-        var blockers = new HashSet<Coordinate>();
+        var blockers = new HashSet<string>();
 
         foreach (var sensor in sensors)
         {
@@ -83,9 +60,9 @@ public class Puzzle15 : PuzzleBase<IEnumerable<string>, int, int>
 
             foreach (var block in blocks)
             {
-                if (!knownBeacons.Contains(block))
+                if (!knownBeacons.Contains(block.ToString()))
                 {
-                    blockers.Add(block);
+                    blockers.Add(block.ToString());
                 }
             }
         }
@@ -93,47 +70,47 @@ public class Puzzle15 : PuzzleBase<IEnumerable<string>, int, int>
         return blockers.Count;
     }
     
-    public override IEnumerable<string> Preprocess(IPuzzleInput input, int part = 1)
+    public override (IEnumerable<Sensor> sensors, HashSet<string> beacons) Preprocess(IPuzzleInput input, int part = 1)
     {
-        return input.GetAllLines();
+        var lines = input.GetAllLines();
+
+        var sensors = new List<Sensor>();
+        var knownBeacons = new HashSet<string>();
+        
+        foreach (var line in lines)
+        {
+            var s = line.Split(':');
+            var sensorinfo = s[0].Split("at ")[^1];
+            var beaconinfo = s[1].Split("at ")[^1];
+            var sensorx = int.Parse(sensorinfo.Split(',')[0].Split('=')[^1]);
+            var sensory = int.Parse(sensorinfo.Split(',')[1].Split('=')[^1]);
+            var beaconx = int.Parse(beaconinfo.Split(',')[0].Split('=')[^1]);
+            var beacony = int.Parse(beaconinfo.Split(',')[1].Split('=')[^1]);
+
+            var beacon = new Coordinate(beaconx, beacony);
+            knownBeacons.Add(beacon.ToString());
+            var sensor = new Sensor(new Coordinate(sensorx, sensory), beacon);
+            sensors.Add(sensor);
+        }
+
+        return (sensors, knownBeacons);
     }
 
-    private class Sensor : Coordinate
+    private (int a, int b) Merge((int a, int b) rangeA, (int a, int b) rangeB)
     {
-        private Coordinate _closestBeacon;
-
-        private int _range;
-
-        public Sensor(int x, int y, Coordinate beacon) : base(x, y)
-        {
-            _closestBeacon = beacon;
-            var diff = (x, y) - beacon;
-            _range = Math.Abs(diff.X) + Math.Abs(diff.Y);
-        }
         
-        public Sensor(Coordinate sensor, Coordinate beacon) : base(sensor)
-        {
-            _closestBeacon = beacon;
-            var diff = sensor - beacon;
-            _range = Math.Abs(diff.X) + Math.Abs(diff.Y);
-        }
 
-        public IEnumerable<Coordinate> GetInRange(int y)
-        {
-            var candidates = new List<Coordinate>();
-            if (y > Y + _range && y < Y - _range)
-            {
-                return candidates;
-            }
-            var min = new Coordinate(this.X - _range, y);
-            candidates.Add(min);
-            return HorizontalRange(min, 1, (this.X + _range) - min.X, candidates);
-        }
+        return (Math.Min(rangeA.a, rangeB.a) ,Math.Max(rangeA.b, rangeB.b));
+    }
 
-        public int Range()
-        {
-            return _range;
-        }
-            
+
+    private bool Overlap((int a, int b) rangeA, (int a, int b) rangeB)
+    {
+        return rangeA.a <= rangeB.b && rangeB.a <= rangeA.b;
+    }
+    
+    private bool Subrange((int a, int b) rangeA, (int a, int b) rangeB)
+    {
+        return rangeA.a >= rangeB.a && rangeA.b <= rangeB.b;
     }
 }
