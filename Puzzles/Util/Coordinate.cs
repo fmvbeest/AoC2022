@@ -163,6 +163,11 @@ public class Sensor : Coordinate
 
         var d = _range - Math.Abs(Y - y);
         range = (X - d, X + d);
+        if (useLimit)
+        {
+            range = (Math.Max(range.a, lower), Math.Min(range.b, upper));
+        }
+        
         return true;
     }
 }
