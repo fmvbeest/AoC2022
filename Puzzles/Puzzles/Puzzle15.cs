@@ -13,7 +13,8 @@ public class Puzzle15 : PuzzleBase<(IEnumerable<Sensor> sensors, HashSet<string>
     {
         var (sensors, knownBeacons) = input;
 
-        var y = 10;
+        //const int y = 10;
+        const int y = 2_000_000;
         var ranges = new List<(int a, int b)>();
         foreach (var sensor in sensors)
         {
@@ -22,11 +23,8 @@ public class Puzzle15 : PuzzleBase<(IEnumerable<Sensor> sensors, HashSet<string>
                 ranges.Add(range);
             }
         }
-
         ranges = ranges.OrderBy(x => x.a).ThenBy(x => x.b).ToList();
-
         var currentRange = ranges.First();
-
         var newRanges = new List<(int a, int b)>();
 
         foreach (var range in ranges.Skip(1))
@@ -51,7 +49,9 @@ public class Puzzle15 : PuzzleBase<(IEnumerable<Sensor> sensors, HashSet<string>
     {
         var (sensors, knownBeacons) = input;
 
-        var limit = 4_000_000;
+        //const int limit = 20;
+        const int limit = 4_000_000;
+        const int multiplier = 4_000_000;
         var allRanges = new List<List<(int, int)>>();
 
         var xBeacon = 0;
@@ -61,7 +61,6 @@ public class Puzzle15 : PuzzleBase<(IEnumerable<Sensor> sensors, HashSet<string>
         for (var i = 0; i < limit; i++)
         {
             var ranges = new List<(int a, int b)>();
-        
             foreach (var sensor in sensors)
             {
                 if (sensor.HorizontalBlockRange(i, out var range, useLimit:true, upper:limit))
@@ -69,13 +68,9 @@ public class Puzzle15 : PuzzleBase<(IEnumerable<Sensor> sensors, HashSet<string>
                     ranges.Add(range);
                 }
             }
-
             ranges = ranges.OrderBy(x => x.a).ThenBy(x => x.b).ToList();
-            
-            
-            
-            var currentRange = ranges.First();
 
+            var currentRange = ranges.First();
             var newRanges = new List<(int a, int b)>();
 
             foreach (var range in ranges.Skip(1))
@@ -90,28 +85,19 @@ public class Puzzle15 : PuzzleBase<(IEnumerable<Sensor> sensors, HashSet<string>
                     newRanges.Add(currentRange);
                     currentRange = range;
                 }
-                 
             }
             newRanges.Add(currentRange);
 
             if (newRanges.Sum(x => x.b - x.a) < limit)
             {
-                Console.WriteLine($"Line {i} sum: {newRanges.Sum(x => x.b - x.a)}");
-
                 yBeacon = i;
                 xBeacon = newRanges.First().b + 1;
-
                 break;
-
             }
-            
-            
             allRanges.Add(newRanges);
-            
-            
         }
 
-        return (long)limit * xBeacon + yBeacon;
+        return (long)multiplier * xBeacon + yBeacon;
     }
     
     public override (IEnumerable<Sensor> sensors, HashSet<string> beacons) Preprocess(IPuzzleInput input, int part = 1)
@@ -140,26 +126,18 @@ public class Puzzle15 : PuzzleBase<(IEnumerable<Sensor> sensors, HashSet<string>
         return (sensors, knownBeacons);
     }
 
-    private (int a, int b) Merge((int a, int b) rangeA, (int a, int b) rangeB)
+    private static (int a, int b) Merge((int a, int b) rangeA, (int a, int b) rangeB)
     {
-        
-
         return (Math.Min(rangeA.a, rangeB.a) ,Math.Max(rangeA.b, rangeB.b));
     }
 
-
-    private bool Overlap((int a, int b) rangeA, (int a, int b) rangeB)
+    private static bool Overlap((int a, int b) rangeA, (int a, int b) rangeB)
     {
         return rangeA.a <= rangeB.b && rangeB.a <= rangeA.b;
     }
 
-    private bool Adjacent((int a, int b) rangeA, (int a, int b) rangeB)
+    private static bool Adjacent((int a, int b) rangeA, (int a, int b) rangeB)
     {
         return rangeA.b == rangeB.a - 1;
-    }
-    
-    private bool Subrange((int a, int b) rangeA, (int a, int b) rangeB)
-    {
-        return rangeA.a >= rangeB.a && rangeA.b <= rangeB.b;
     }
 }

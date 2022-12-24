@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace AoC2022.Util;
+﻿namespace AoC2022.Util;
 
 public class Monkey
 {
@@ -30,30 +28,19 @@ public class Monkey
         return _operate(item);
     }
 
-    private static long Relief(long item)
-    {
-        return item/3;
-    }
-
     public (long item, int throwTo) Turn(int part = 1)
     {
         var item = Items.Dequeue();
         item = Inspect(item);
         if (part == 1)
         {
-            item = Relief(item);            
+            item /= 3;            
         }
-        var throwTo = (item % Modulus == 0) ? _throwTo.testTrue : _throwTo.testFalse;
+        var throwTo = item % Modulus == 0 ? _throwTo.testTrue : _throwTo.testFalse;
         return (item, throwTo);
     }
 
-    public bool HasItems()
-    {
-        return Items.Count > 0;
-    }
+    public bool HasItems() => Items.Count > 0;
 
-    public int Inspections()
-    {
-        return _inspections;
-    }
+    public int Inspections() => _inspections;
 }

@@ -8,24 +8,22 @@ public class Puzzle14 : PuzzleBase<List<List<Coordinate>>, int, int>
     protected override string Filename => "Input/puzzle-input-14";
     protected override string PuzzleTitle => "--- Day 14: Regolith Reservoir ---";
 
+    private HashSet<Coordinate> _rocks;
+    private HashSet<Coordinate> _sand;
+
     public override int PartOne(List<List<Coordinate>> input)
     {
-        var sandSource = new Coordinate(500, 0);
-
-        var rocks = InitializeRocks(input);
-
-        var bottom = rocks.Select(x => x.Y).Max();
+        _rocks = InitializeRocks(input);
+        _sand = new HashSet<Coordinate>();
         
-        var sand = new HashSet<Coordinate>();
-
-        var isBlocked = false;
+        var bottom = _rocks.Select(x => x.Y).Max();
+        var sandSource = new Coordinate(500, 0);
         var intoTheAbyss = false;
-       
 
         while (!intoTheAbyss)
         {
             var sandUnit = sandSource;
-            isBlocked = false;
+            var isBlocked = false;
             while (!isBlocked)
             {
                 if (sandUnit.Y > bottom)
@@ -34,78 +32,73 @@ public class Puzzle14 : PuzzleBase<List<List<Coordinate>>, int, int>
                     break;
                 }
                 
-                if (!IsBlocked(sandUnit + (0, 1), rocks, sand))
+                if (!IsBlocked(sandUnit + (0, 1), _rocks, _sand))
                 {
                     sandUnit += (0, 1);
                     continue;
                 }
-                if (!IsBlocked(sandUnit + (-1, 1), rocks, sand))
+                if (!IsBlocked(sandUnit + (-1, 1), _rocks, _sand))
                 {
                     sandUnit += (-1, 1);
                     continue;
                 }
-                if (!IsBlocked(sandUnit + (1, 1), rocks, sand))
+                if (!IsBlocked(sandUnit + (1, 1), _rocks, _sand))
                 {
                     sandUnit += (1, 1);
                     continue;
                 }
 
-                sand.Add(sandUnit);
+                _sand.Add(sandUnit);
                 isBlocked = true;
             }
         }
 
-        return sand.Count;
+        return _sand.Count;
     }
 
     public override int PartTwo(List<List<Coordinate>> input)
     {
-        var sandSource = new Coordinate(500, 0);
-
-        var rocks = InitializeRocks(input);
-
-        var bottom = rocks.Select(x => x.Y).Max() + 2;
-        
-        var sand = new HashSet<Coordinate>();
-        
-        var isBlocked = false;
-        var sourceBlocked = false;
+        _rocks = InitializeRocks(input);
+        _sand = new HashSet<Coordinate>();
        
+        var bottom = _rocks.Select(x => x.Y).Max() + 2;
+        var sandSource = new Coordinate(500, 0);
+        var sourceBlocked = false;
+        
         while (!sourceBlocked)
         {
             var sandUnit = sandSource;
-            isBlocked = false;
+            var isBlocked = false;
             while (!isBlocked)
             {
-                if (!IsBlocked(sandUnit + (0, 1), rocks, sand) && sandUnit.Y != bottom-1)
+                if (!IsBlocked(sandUnit + (0, 1), _rocks, _sand) && sandUnit.Y != bottom-1)
                 {
                     sandUnit += (0, 1);
                     continue;
                 }
-                if (!IsBlocked(sandUnit + (-1, 1), rocks, sand) && sandUnit.Y != bottom-1)
+                if (!IsBlocked(sandUnit + (-1, 1), _rocks, _sand) && sandUnit.Y != bottom-1)
                 {
                     sandUnit += (-1, 1);
                     continue;
                 }
-                if (!IsBlocked(sandUnit + (1, 1), rocks, sand) && sandUnit.Y != bottom-1)
+                if (!IsBlocked(sandUnit + (1, 1), _rocks, _sand) && sandUnit.Y != bottom-1)
                 {
                     sandUnit += (1, 1);
                     continue;
                 }
 
-                sand.Add(sandUnit);
+                _sand.Add(sandUnit);
                 if (sandUnit.Equals(sandSource))
                 {
                     sourceBlocked = true;
                     break;
                 }
-              
-
+                
                 isBlocked = true;
             }
         }
 
-        return sand.Count;
+        return _sand.Count;
     }
     
     public override List<List<Coordinate>> Preprocess(IPuzzleInput input, int part = 1)

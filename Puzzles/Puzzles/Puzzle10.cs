@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.Tracing;
-using System.Text;
-
-namespace AoC2022.Puzzles;
+﻿namespace AoC2022.Puzzles;
 
 public class Puzzle10 : PuzzleBase<string[], int, string>
 {
@@ -112,14 +109,11 @@ public class Puzzle10 : PuzzleBase<string[], int, string>
         private void AddTick(int part = 1)
         {
             _circuitClock++;
-            if (part == 1)
+            if (part != 1) return;
+            if (_circuitClock % 40 == 20)
             {
-                if (_circuitClock % 40 == 20)
-                {
-                    _signalStrength += Register * _circuitClock;
-                }
+                _signalStrength += Register * _circuitClock;
             }
-            
         }
         
         public enum Instruction
@@ -127,16 +121,9 @@ public class Puzzle10 : PuzzleBase<string[], int, string>
             NOOP, ADDX
         }
 
-        public int SignalStrength()
-        {
-            return _signalStrength;
-        }
+        public int SignalStrength() => _signalStrength;
 
-        public int GetTicks()
-        {
-            return _circuitClock;
-        }
-
+        public int GetTicks() => _circuitClock;
     }
 
     private class CRT

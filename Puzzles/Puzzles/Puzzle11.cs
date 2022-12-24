@@ -38,7 +38,7 @@ public class Puzzle11 : PuzzleBase<IEnumerable<Monkey>, int, long>
         var rounds = 0;
 
         var modulus = monkeys[0].Modulus;
-        for (int i = 1; i < monkeys.Count; i++)
+        for (var i = 1; i < monkeys.Count; i++)
         {
             modulus *= monkeys[i].Modulus;
         }
@@ -46,11 +46,11 @@ public class Puzzle11 : PuzzleBase<IEnumerable<Monkey>, int, long>
         while (rounds < 10000)
         {
             rounds++;
-            for (var i = 0; i < monkeys.Count; i++)
+            foreach (var monkey in monkeys)
             {
-                while (monkeys[i].HasItems())
+                while (monkey.HasItems())
                 {
-                    var (item, throwTo) = monkeys[i].Turn(2);
+                    var (item, throwTo) = monkey.Turn(2);
 
                     monkeys[throwTo].Items.Enqueue(item % modulus);                    
                 }
@@ -63,16 +63,9 @@ public class Puzzle11 : PuzzleBase<IEnumerable<Monkey>, int, long>
     
     public override IEnumerable<Monkey> Preprocess(IPuzzleInput input, int part = 1)
     {
-        var list = new List<Monkey>();
-
         var monkeys = input.GetText().Split(Environment.NewLine+Environment.NewLine);
-        
-        foreach (var monkeyData in monkeys)
-        {
-            list.Add(ParseMonkey(monkeyData));
-        }
 
-        return list;
+        return monkeys.Select(ParseMonkey).ToList();
     }
 
     private Monkey ParseMonkey(string data)
@@ -90,7 +83,7 @@ public class Puzzle11 : PuzzleBase<IEnumerable<Monkey>, int, long>
         return monkey;
     }
 
-    private Func<long, long> ParseOperation(string operation)
+    private static Func<long, long> ParseOperation(string operation)
     {
         var s = operation.Split('=')[^1].Trim().Split(' ');
         var op = s[1];
